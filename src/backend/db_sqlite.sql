@@ -145,8 +145,6 @@ CREATE TABLE if not exists STAGIONE (
     CodSerie INTEGER NOT NULL,
     NumStagione INTEGER NOT NULL,
     NumeroEpisodi INTEGER NOT NULL,
-    Titolo TEXT NOT NULL,
-    TitoloOriginale TEXT NOT NULL,
     Valutazione INTEGER NOT NULL,
     AnnoUscita INTEGER NOT NULL,
     PaeseProduzione TEXT NOT NULL,

@@ -1,6 +1,7 @@
 from nicegui import ui
 from logged_user import get_user
 from backend import login_admin
+from archive import archive_page
 
 @ui.page("/menu_page")
 def menu_page():
@@ -10,7 +11,7 @@ def menu_page():
         with ui.card().classes("bg-indigo"):
             ui.label("Sei un cliente?").style("font-size: 150%")
             with ui.row():
-                ui.button(icon="movie", text="Archivio").classes("bg-purple")
+                ui.button(icon="movie", text="Archivio", on_click=lambda: ui.navigate.to(archive_page)).classes("bg-purple")
                 ui.button(icon="history", text="Cronologia ordini").classes("bg-purple")
             with ui.row():
                 ui.button(icon='verified', text="Ordine corrente").classes("bg-purple")

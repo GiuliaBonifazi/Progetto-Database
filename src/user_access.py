@@ -1,7 +1,7 @@
 from nicegui import ui
 from backend import login_check, find_user, register_user, repeat_email
 from logged_user import get_user
-import menu
+from menu import menu_page
 
 @ui.page('/login_page')
 def login_page():
@@ -51,7 +51,7 @@ def login(email: str, password: str):
         loggedUser["userId"] = foundUser[0]
         loggedUser["name"] = foundUser[1]
         loggedUser["surname"] = foundUser[2]
-        ui.navigate.to("/menu_page")
+        ui.navigate.to(menu_page)
     else:
         ui.notify("Login fallito")
 
