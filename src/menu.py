@@ -12,7 +12,9 @@ def menu_page():
             with ui.row():
                 ui.button(icon="movie", text="Archivio").classes("bg-purple")
                 ui.button(icon="scoreboard", text="Cronologia ordini").classes("bg-purple")
-            ui.button(icon='history', text="Ordine corrente").classes("bg-purple")
+            with ui.row():
+                ui.button(icon='history', text="Ordine corrente").classes("bg-purple")
+                ui.button(icon='history', text="Classifiche").classes("bg-purple")
         with ui.card().classes("bg-blue"):
             ui.label("Sei l'amministratore?").style("font-size: 150%")
             with ui.row():
@@ -23,6 +25,9 @@ def menu_page():
     ui.button("Login amministratore", on_click=lambda: check_admin(admin_pw.value)).classes("bg-blue")
     
 def check_admin(password: str):
+    if not password:
+        ui.notify("Inserisci la password admin", color="red")
+        return
     user = get_user()
     if user["admin"] == False:
         if login_admin(get_user()["userId"], password):

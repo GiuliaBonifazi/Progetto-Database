@@ -39,6 +39,12 @@ def signup_page():
             ui.button("Conferma", on_click=lambda: signup(email=email.value, password=pw.value, name=name.value, surname=surname.value, cell=tel.value))
             
 def login(email: str, password: str):
+    if not password:
+        notify_empty_field("Password")
+        return
+    if not email:
+        notify_empty_field("Email")
+        return
     if login_check(email, password):
         loggedUser = get_user()
         foundUser = find_user(email, password)
