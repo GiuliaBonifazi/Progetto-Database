@@ -11,9 +11,9 @@ def menu_page():
             ui.label("Sei un cliente?").style("font-size: 150%")
             with ui.row():
                 ui.button(icon="movie", text="Archivio").classes("bg-purple")
-                ui.button(icon="scoreboard", text="Cronologia ordini").classes("bg-purple")
+                ui.button(icon="history", text="Cronologia ordini").classes("bg-purple")
             with ui.row():
-                ui.button(icon='history', text="Ordine corrente").classes("bg-purple")
+                ui.button(icon='verified', text="Ordine corrente").classes("bg-purple")
                 ui.button(icon='sort', text="Classifiche").classes("bg-purple")
         with ui.card().classes("bg-blue"):
             ui.label("Sei l'amministratore?").style("font-size: 150%")
