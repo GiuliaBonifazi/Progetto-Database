@@ -1,3 +1,7 @@
+INSERT INTO UTENTE (CodUtente, Nome, Cognome, Email, `Password`, NumTelefono, PasswordAdmin)
+VALUES
+     (1, "Giulia", "Boni", "giulia@giulia.it", "12345678", 24167435, "admin");
+
 INSERT INTO MEMBRO_DEL_CAST (CodMembroCast, NomeArte, DataNascita, DataMorte, Attore, Regista)
 VALUES 
      (1, "Tim Burton", '1958/08/25', null, true, true),
@@ -25,7 +29,7 @@ VALUES
      (5, 2),
      (5, 3);
 
-INSERT INTO SERIE (CodSerie, Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione):
+INSERT INTO SERIE (CodSerie, Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione)
 VALUES
      (1, "Il Trono di Pane", "Throne of Bread", 30, 2003, "USA"),
      (2, "Pink Mirror - Il Riflesso Rosa", "Pink Mirror", 70, 2016, "UK"),
@@ -33,7 +37,7 @@ VALUES
      (4, "Ricordati di me", "Ricordami di te", 99, 2022, "IT"),
      (5, "Gli Anelli del Podere", "Rings of Power", 12, 2023, "UK");
 
-INSERT INTO RECITAZIONE_SERIE(CodSerie, CodAttore):
+INSERT INTO RECITAZIONE_SERIE(CodSerie, CodAttore)
 VALUES
      (1, 1),
      (1, 2),

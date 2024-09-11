@@ -32,7 +32,7 @@ def all_movie_cards():
 def rent_movie(movieId, support):
     res = rent_movie_copy(movieId, support)
     if res is None:
-        ui.notify("Ci spiace! Il titolo richiesto non è al momento disponibile in quel formato")
+        ui.notify("Ci spiace! Il titolo richiesto non è al momento disponibile in quel formato", type="negative")
     else:
         user = get_user
         user["order"].append(res[0])
