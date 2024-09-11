@@ -14,15 +14,15 @@ def menu_page():
                 ui.button(icon="scoreboard", text="Cronologia ordini").classes("bg-purple")
             with ui.row():
                 ui.button(icon='history', text="Ordine corrente").classes("bg-purple")
-                ui.button(icon='history', text="Classifiche").classes("bg-purple")
+                ui.button(icon='sort', text="Classifiche").classes("bg-purple")
         with ui.card().classes("bg-blue"):
             ui.label("Sei l'amministratore?").style("font-size: 150%")
             with ui.row():
-                ui.button(icon="inventory", text="Amplia inventario").classes("bg-cyan")
+                ui.button(icon="add_circle", text="Amplia inventario").classes("bg-cyan")
                 ui.button(icon="newspaper", text="Ordini per cliente").classes("bg-cyan")
             ui.button(icon='history', text="Ordini attivi").classes("bg-cyan")
     admin_pw = ui.input(label="Password admin")
-    ui.button("Login amministratore", on_click=lambda: check_admin(admin_pw.value)).classes("bg-blue")
+    ui.button(icon="key", text="Login amministratore", on_click=lambda: check_admin(admin_pw.value)).classes("bg-blue")
     
 def check_admin(password: str):
     if not password:
