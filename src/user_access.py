@@ -1,6 +1,7 @@
 from nicegui import ui
 from backend import login_check, find_user, register_user, repeat_email
 from logged_user import get_user
+import menu
 
 @ui.page('/login_page')
 def login_page():
@@ -20,8 +21,9 @@ def login_page():
 @ui.page('/signup_page')
 def signup_page():
     ui.page_title = "Registrati"
-    ui.label("Registrati").style("font-size: 150%; font-weight: bold;")
     with ui.column().classes('w-full items-center'):
+        ui.label("Registrati").style("font-size: 150%; font-weight: bold;")
+        
         name = ui.input(label="Nome *", placeholder="Scrivi il tuo nome")
         
         surname = ui.input(label="Cognome *", placeholder="Scrivi il tuo cognome")
@@ -43,14 +45,32 @@ def login(email: str, password: str):
         loggedUser["userId"] = foundUser[0]
         loggedUser["name"] = foundUser[1]
         loggedUser["surname"] = foundUser[2]
-        print(get_user())
+        ui.navigate.to("/menu_page")
     else:
         ui.notify("Login fallito")
 
 def signup(email: str, password: str, name: str, surname: str, cell: int):
+    if not name:
+        notify_empty_field("Nome")
+        return
+    if not password:
+        notify_empty_field("Password")
+        return
+    if not surname:
+        notify_empty_field("Cognome")
+        return
+    if not email:
+        notify_empty_field("Email")
+        return
+    if not cell:
+        notify_empty_field("Numero di telefono")
+        return
     if not repeat_email(email):
         register_user(email, password, name, surname, cell)
         ui.navigate.to("/login_page")
     else:
         ui.notify("Email già in uso")
+
+def notify_empty_field(field):
+    ui.notify("Non puoi lasciare il campo " + field + " vuoto!")
         
