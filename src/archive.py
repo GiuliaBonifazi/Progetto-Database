@@ -1,5 +1,5 @@
 from nicegui import ui
-from card_templates import all_movie_cards
+from movie_cards import all_movie_cards
 
 @ui.page("/archive_page")
 def archive_page():

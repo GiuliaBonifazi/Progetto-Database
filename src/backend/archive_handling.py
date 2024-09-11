@@ -24,3 +24,11 @@ def get_movie_actors_names(movieId):
     db = get_database()
     cur = db.execute("SELECT NomeArte FROM MEMBRO_DEL_CAST JOIN RECITAZIONE_FILM ON CodMembroCast=CodAttore WHERE CodFilm=?", (movieId,))
     return cur.fetchall()
+
+def rent_movie_copy(movieId, support):
+    db = get_database()
+    cur = db.execute("SELECT CodCopia FROM COPIA_ARTICOLO WHERE CodFilm=? AND Disponibilita=true AND Supporto=?", (movieId, support))
+    if (cur.rowcount == 0):
+        return None
+    else:
+        return cur.fetchone()
