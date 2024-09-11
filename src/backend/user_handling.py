@@ -20,3 +20,8 @@ def repeat_email(email: str):
     db = get_database()
     cur = db.execute("SELECT COUNT(*) FROM UTENTE WHERE Email=?", (email,))
     return cur.fetchone()[0] == 1
+
+def login_admin(userId: int, password: str):
+    db = get_database()
+    cur = db.execute("SELECT COUNT(*) FROM UTENTE WHERE CodUtente=? AND PasswordAdmin=?", (userId, password,))
+    return cur.fetchone()[0] == 1

@@ -1,4 +1,4 @@
-user = {"userId" : -1, "name": "", "surname": ""}
+user = {"userId" : -1, "name": "", "surname": "", "admin" : False}
 
 def get_user():
     global user
