@@ -10,7 +10,7 @@ def get_all_actors():
     cur = db.execute("SELECT NomeArte, CodMembroCast FROM MEMBRO_DEL_CAST WHERE Attore=true")
     return cur.fetchall()
 
-def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int, actors):
+def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int, actors, genres):
     db = get_database()
     cur = db.execute("INSERT INTO FILM (Titolo, TitoloOriginale, Durata, Valutazione, AnnoUscita, PaeseProduzione, CodRegista) \
                         VALUES (?, ?, ?, ?, ?, ?, ?)", (title, ogTitle, runtime, mark, year, country, director))
@@ -19,8 +19,11 @@ def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, coun
     for act in actors:
         db.execute("INSERT INTO RECITAZIONE_FILM (CodAttore, CodFilm) VALUES (?, ?)", (act, filmId))
         db.commit()
+    for gen in genres:
+        db.execute("INSERT INTO GENERE_FILM (CodFilm, Genere) VALUES (?, ?)", (filmId, gen[0]))
+        db.commit()
 
-def add_series(title: str, ogTitle: str, mark: int, year: int, country: str, actors):
+def add_series(title: str, ogTitle: str, mark: int, year: int, country: str, actors, genres):
     db = get_database()
     cur = db.execute("INSERT INTO SERIE (Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione) \
                      VALUES (?, ?, ?, ?, ?)", (title, ogTitle, mark, year, country))
@@ -29,16 +32,28 @@ def add_series(title: str, ogTitle: str, mark: int, year: int, country: str, act
     for act in actors:
         db.execute("INSERT INTO RECITAZIONE_SERIE (CodAttore, CodSerie) VALUES (?, ?)", (act, seriesId))
         db.commit()
+    for gen in genres:
+        db.execute("INSERT INTO GENERE_SERIE (CodSerie, Genere) VALUES (?, ?)", (seriesId, gen[0]))
+        db.commit()
+       
+def check_series_season(seriesId: int, seasonId: int):
+    db = get_database()
+    cur = db.execute("SELECT COUNT(*) FROM STAGIONE WHERE CodSerie=? AND NumStagione=?", (seriesId, seasonId))
+    return cur.fetchone()[0] > 0     
         
 def add_season(seriesId: int, numSeason: int, numEpisodes: int, mark: int, year: int, country: str, actors):
     db = get_database()
-    db.execute("INSERT INTO STAGIONE (CodSerie, NumStagione, NumeroEpisodi, Valutazione, AnnoUscita, PaeseProduzione) \
-                      VALUES (?, ?, ?, ?, ?, ?)", (seriesId, numSeason, numEpisodes, mark, year, country))
-    db.commit()
-    for act in actors:
-        db.execute("INSERT INTO RECITAZIONE_STAGIONE (CodAttore, CodSerie, NumStagione) VALUES (?, ?, ?)", (act, seriesId, numSeason))
+    if not check_series_season(seriesId, numSeason):
+        db.execute("INSERT INTO STAGIONE (CodSerie, NumStagione, NumeroEpisodi, Valutazione, AnnoUscita, PaeseProduzione) \
+                        VALUES (?, ?, ?, ?, ?, ?)", (seriesId, numSeason, numEpisodes, mark, year, country))
         db.commit()
-        
+        for act in actors:
+            db.execute("INSERT INTO RECITAZIONE_STAGIONE (CodAttore, CodSerie, NumStagione) VALUES (?, ?, ?)", (act, seriesId, numSeason))
+            db.commit()     
+        return ("", True)
+    else:
+        return ("La stagione che hai inserito esiste già", False)
+    
 def add_cast(name: str, birth: str, death: str, isActor: bool, isDirector: bool):
     db = get_database()
     db.execute("INSERT INTO MEMBRO_DEL_CAST (NomeArte, DataNascita, DataMorte, Attore, Regista) VALUES (?, ?, ?, ?, ?)",
@@ -104,7 +119,7 @@ def add_language(lang: str):
         db.commit()
         return ("", True)
     
-def add_copy(movie: int, series: int, season: int, support: str, shelf: int, shelving: int, type: str):
+def add_copy(movie: int, series: int, season: int, support: str, shelf: int, shelving: int, type: str, languages):
     db = get_database()
     if not check_for_shelf(shelving, shelf):
         return ("La posizione selezionata non è valida", False)
@@ -112,15 +127,26 @@ def add_copy(movie: int, series: int, season: int, support: str, shelf: int, she
         case "SERIES":
             # add new copy for every season. position will be location of first season for all of them
             for season in get_seasons_from_series(series):
-                add_copy(movie, series, season[1], support, shelf, shelving, "SEASON")
+                add_copy(movie, series, season[1], support, shelf, shelving, "SEASON", languages)
             return ("", True)
         case "SEASON":
-            db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodSerie, NumStagione) \
-                        VALUES (?, true, ?, ?, ?, ?)", (support, shelving, shelf, series, season))
-            db.commit()
-            return ("", True)
+            if not check_series_season(series, season):
+                return ("La stagione inserita non esiste", False)
+            else:
+                cur = db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodSerie, NumStagione) \
+                            VALUES (?, true, ?, ?, ?, ?)", (support, shelving, shelf, series, season))
+                db.commit()
+                insert_copy_languages(cur.lastrowid, languages)
+                return ("", True)
         case "MOVIE":
-            db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodFilm) \
+            cur = db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodFilm) \
                         VALUES (?, true, ?, ?, ?)", (support, shelving, shelf, movie))
             db.commit()
+            insert_copy_languages(cur.lastrowid, languages)
             return ("", True)
+
+def insert_copy_languages(copy, languages):
+    db = get_database()
+    for l in languages:
+        db.execute("INSERT INTO LINGUA_COPIA (CodCopia, Lingua) VALUES (?, ?)", (copy, l))
+        db.commit()

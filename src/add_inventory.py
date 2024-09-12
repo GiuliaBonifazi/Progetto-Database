@@ -3,6 +3,8 @@ from template import directors_as_dict, actors_as_dict, notify_empty_field, seri
 from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, add_genre, add_language, add_copy, get_languages, get_genres
 
 selected_actors = []
+selected_genres = []
+selected_languages = []
 
 @ui.page("/add_to_archive_page")
 def add_to_archive_page():
@@ -24,10 +26,10 @@ def add_to_archive_page():
                 mark = ui.input(label="Valutazione")
                 year = ui.input(label="Anno d'uscita")
                 country = ui.input(label="Paese di produzione")
+                genre_select()
                 with ui.row():
                     ui.label("Seleziona regista: ")
                     director = ui.select(directors_as_dict(), label="Regista")
-                with ui.row():
                     actor_select()
                 ui.button(text="Aggiungi", on_click=lambda: add_movie_check(title.value, ogTitle.value, runtime.value, mark.value, 
                                                                             year.value, country.value, director.value))
@@ -39,6 +41,7 @@ def add_to_archive_page():
                 mark_ser = ui.input(label="Valutazione")
                 year_ser = ui.input(label="Anno d'uscita")
                 country_ser = ui.input(label="Paese di produzione")
+                genre_select()
                 actor_select()
             ui.button(text="Aggiungi", on_click=lambda: add_series_check(title_ser.value, ogTitle_ser.value, 
                                                                          mark_ser.value, year_ser.value, country_ser.value))
@@ -86,7 +89,7 @@ def add_to_archive_page():
                     copyShelving = ui.input(label="Scaffalatura")
                 with ui.row():
                     ui.label("Seleziona lingue: ")
-                    ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True).props("use-chips")
+                    ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True, on_change=update_selected_languages).props("use-chips")
                 ui.button("Aggiungi", on_click=lambda: add_copy_check(copyFilm.value, copySeries.value, copySeason.value, support.value, 
                                                                       copyShelf.value, copyShelving.value))
         #ZONA -----------------------------
@@ -98,7 +101,7 @@ def add_to_archive_page():
                 shelfShelving = ui.input(label="Scaffalatura")
                 shelf = ui.input(label="Scaffale")
                 ui.button("Aggiungi", on_click=lambda: add_shelf_check(shelf.value, shelfShelving.value))
-        #ALTRO
+        #ALTRO ----------------------------
         with ui.tab_panel(other).classes("w-full items-center"):
             with ui.card().classes("border"):
                 genre = ui.input(label="Genere")
@@ -112,12 +115,28 @@ def actor_select():
         ui.label("Seleziona attori: ")
         ui.select(actors_as_dict(), label="Attori", multiple=True, on_change=update_selected_actors).props("use-chips")
 
+def genre_select():
+    with ui.row():
+        ui.label("Seleziona genere/i ")
+        ui.select(get_genres(), label="Generi", multiple=True, on_change=update_selected_genres).props("use-chips")
+
 def update_selected_actors(event):
     global selected_actors
     selected_actors = event.value
     return
 
+def update_selected_genres(event):
+    global selected_genres
+    selected_genres = event.value
+    return
+
+def update_selected_languages(event):
+    global selected_languages
+    selected_languages = event.value
+    return
+
 def add_copy_check(movie: int, series: int, season: int, support: str, shelf: int, shelving: int):
+    global selected_languages
     if not shelf:
         notify_empty_field("Scaffale")
         return
@@ -134,20 +153,20 @@ def add_copy_check(movie: int, series: int, season: int, support: str, shelf: in
                 return
         else:
             if not season:
-                mess, success = add_copy(movie, series, season, support, shelf, shelving, "SERIES")
+                mess, success = add_copy(movie, series, season, support, shelf, shelving, "SERIES", selected_languages)
                 if success:
                     notify_added("copia di serie")
                 else:
                     ui.notify(mess, type="negative")
             else:
-                mess, success = add_copy(movie, series, season, support, shelf, shelving, "SEASON")
+                mess, success = add_copy(movie, series, season, support, shelf, shelving, "SEASON", selected_languages)
                 if success:
                     notify_added("copia di serie")
                 else:
                     ui.notify(mess, type="negative")
     elif not series:
         if not season:
-            mess, success = add_copy(movie, series, season, support, shelf, shelving, "MOVIE")
+            mess, success = add_copy(movie, series, season, support, shelf, shelving, "MOVIE", selected_languages)
             if success:
                 notify_added("copia di serie")
             else:
@@ -181,6 +200,7 @@ def add_language_check(lang: str):
         ui.notify(mess, type="negative")
 
 def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int):
+    global selected_genres
     global selected_actors
     if not title:
         notify_empty_field("Titolo")
@@ -206,10 +226,14 @@ def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int
     if len(selected_actors) < 3:
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
-    add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors)
+    add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors, selected_genres)
+    selected_genres = []
+    selected_actors = []
     notify_added("film")
 
 def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: str):
+    global selected_genres
+    global selected_actors
     if not title:
         notify_empty_field("Titolo")
         return
@@ -228,7 +252,9 @@ def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: st
     if len(selected_actors) < 3:
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
-    add_series(title, ogTitle, mark, year, country, selected_actors)
+    add_series(title, ogTitle, mark, year, country, selected_actors, selected_genres)
+    selected_genres = []
+    selected_actors = []
     notify_added("serie")
 
 def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, country: str):
@@ -250,8 +276,11 @@ def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, countr
     if len(selected_actors) < 3:
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
-    add_season(seriesId, numSeason, 0, mark, year, country, selected_actors)
-    notify_added("stagione")
+    mess, success = add_season(seriesId, numSeason, 0, mark, year, country, selected_actors)
+    if success:
+        notify_added("stagione")
+    else:
+        ui.notify(mess, type="negative")  
     
 def add_member_check(name: str, birth: str, death: str, actor: bool, director: bool):
     if not name:
