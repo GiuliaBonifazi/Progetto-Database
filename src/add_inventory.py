@@ -1,6 +1,6 @@
 from nicegui import ui
 from template import directors_as_dict, actors_as_dict, notify_empty_field
-from backend import add_movie
+from backend import add_movie, add_series
 
 selected_actors = []
 
@@ -27,12 +27,21 @@ def add_to_archive_page():
                     ui.label("Seleziona regista: ")
                     director = ui.select(directors_as_dict(), label="Regista")
                 with ui.row():
-                    ui.label("Seleziona attori: ")
-                    actors = ui.select(actors_as_dict(), label="Attori", multiple=True, on_change=update_selected_actors).props("use-chips")
-                ui.button(text="Conferma", on_click=lambda: add_movie_check(title.value, ogTitle.value, runtime.value, mark.value, 
-                                                              year.value, country.value, director.value))
-        with ui.tab_panel(series):
-            ui.label('Second tab')
+                    actor_select()
+                ui.button(text="Aggiungi", on_click=lambda: add_movie_check(title.value, ogTitle.value, runtime.value, mark.value, 
+                                                                            year.value, country.value, director.value))
+        #SERIE ----
+        with ui.tab_panel(series).classes("items-center"):
+            with ui.grid(columns=2).classes('w-full items-center'):
+                title_ser = ui.input(label="Titolo")
+                ogTitle_ser = ui.input(label="Titolo originale")
+                mark_ser = ui.input(label="Valutazione")
+                year_ser = ui.input(label="Anno d'uscita")
+                country_ser = ui.input(label="Paese di produzione")
+                with ui.row():
+                    actor_select()
+            ui.button(text="Aggiungi", on_click=lambda: add_series_check(title_ser.value, ogTitle_ser.value, 
+                                                                         mark_ser.value, year_ser.value, country_ser.value))
         with ui.tab_panel(season):
             ui.label('Second tab')
         with ui.tab_panel(member):
@@ -41,6 +50,10 @@ def add_to_archive_page():
             ui.label('Second tab')
         with ui.tab_panel(zone):
             ui.label('Second tab')
+
+def actor_select():
+    ui.label("Seleziona attori: ")
+    ui.select(actors_as_dict(), label="Attori", multiple=True, on_change=update_selected_actors).props("use-chips")
 
 def update_selected_actors(event):
     global selected_actors
@@ -75,3 +88,24 @@ def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
     add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors)
+
+def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: str):
+    if not title:
+        notify_empty_field("Titolo")
+        return
+    if not ogTitle:
+        notify_empty_field("Titolo originale")
+        return
+    if not mark:
+        notify_empty_field("Valutazione")
+        return
+    if not year:
+        notify_empty_field("Anno d'uscita")
+        return
+    if not country:
+        notify_empty_field("Paese di produzione")
+        return
+    if len(selected_actors) < 3:
+        ui.notify("Inserisci almeno 3 attori", type="warning")
+        return
+    add_series(title, ogTitle, mark, year, country, selected_actors)

@@ -19,3 +19,13 @@ def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, coun
     for act in actors:
         db.execute("INSERT INTO RECITAZIONE_FILM (CodAttore, CodFilm) VALUES (?, ?)", (act, filmId))
         db.commit()
+
+def add_series(title: str, ogTitle: str, mark: int, year: int, country: str, actors):
+    db = get_database()
+    cur = db.execute("INSERT INTO SERIE (Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione) \
+                     VALUES (?, ?, ?, ?, ?)", (title, ogTitle, mark, year, country))
+    seriesId = cur.lastrowid
+    db.commit()
+    for act in actors:
+        db.execute("INSERT INTO RECITAZIONE_SERIE (CodAttore, CodSerie) VALUES (?, ?)", (act, seriesId))
+        db.commit()
