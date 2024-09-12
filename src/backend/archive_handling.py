@@ -60,13 +60,17 @@ def get_seasons_from_series(seriesId: int):
     return cur.fetchall()
 
 def rent_series(seriesId: int, support: str):
-    db = get_database()
-    cur = db.execute("Select CodCopia FROM COPIA_ARTICOLO WHERE CodSerie=? AND Supporto=? AND Disponibilita=true", (seriesId, support))
-    row = cur.fetchone()
-    if row is None:
-        return ("Spiacente, quel formato non è al momento disponibile.", False)
-    else:
-        return (row, True)
+    series = get_seasons_from_series(seriesId)
+    if series == []:
+        return ("Spiacente, la serie non ha alcuna stagione", False)
+    seasons = []
+    for s in series:
+        res, success = rent_season(seriesId, s[1], support)
+        if not success:
+            return ("Spiacente, quel formato non è al momento disponibile per la stagione " + str(s[1]), False)
+        else:
+            seasons.append(res[0])
+    return (seasons, True)
     
 def rent_season(seriesId: int, seasonNum: int, support: str):
     db = get_database()

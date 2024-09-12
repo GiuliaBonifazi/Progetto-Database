@@ -35,11 +35,12 @@ def check_rent_series(seriesId: int, support: str):
         ui.notify(res, type="negative")
     else:
         user = get_user()
-        if res[0] not in user["order"]:
-            user["order"].append(res[0])
-            ui.notify("Aggiunto alla prenotazione (ricorda di confermare prima di uscire!)", type="positive")
-        else:
-            ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")
+        for id in res:
+            if res not in user["order"]:
+                user["order"].append(id)
+            else:
+                ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")
+        ui.notify("Aggiunto alla prenotazione (ricorda di confermare prima di uscire!)", type="positive")
 
 def season_card(season, color):
     with ui.card().classes("bg-" + color + "-100 border"):

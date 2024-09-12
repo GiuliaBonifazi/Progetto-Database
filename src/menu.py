@@ -5,6 +5,7 @@ from archive import archive_page
 from add_inventory import add_to_archive_page
 from current_order import current_order
 from user_order_history import order_history
+from rankings import rankings_page
 
 @ui.page("/menu_page")
 def menu_page():
@@ -17,7 +18,7 @@ def menu_page():
                 ui.button(icon="history", text="Cronologia ordini", on_click=lambda: ui.navigate.to(order_history)).classes("bg-purple")
             with ui.row():
                 ui.button(icon='verified', text="Ordine corrente", on_click=lambda: ui.navigate.to(current_order)).classes("bg-purple")
-                ui.button(icon='sort', text="Classifiche").classes("bg-purple")
+                ui.button(icon='sort', text="Classifiche", on_click=lambda: ui.navigate.to(rankings_page)).classes("bg-purple")
         with ui.card().classes("bg-blue"):
             ui.label("Sei l'amministratore?").style("font-size: 150%")
             with ui.row():
