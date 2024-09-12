@@ -1,6 +1,6 @@
 from nicegui import ui
-from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict, notify_added
-from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, add_genre, add_language
+from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict, notify_added, movies_as_dict
+from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, add_genre, add_language, add_copy, get_languages, get_genres
 
 selected_actors = []
 
@@ -69,8 +69,26 @@ def add_to_archive_page():
                 isDirector = ui.checkbox(text="Regista *")
                 ui.button("Aggiungi", on_click=lambda: add_member_check(name.value, birth.value, death.value, isActor.value, isDirector.value))
         #COPIA -------------------------------
-        with ui.tab_panel(copy):
-            ui.label('Second tab')
+        with ui.tab_panel(copy).classes("w-full items-center"):
+            with ui.column().classes("w-full items-center"):
+                with ui.card():
+                    ui.label("Scegli un film, una stagione o una serie").style("font-weight: bold;")
+                    with ui.row():
+                        ui.label("Serie e stagione")
+                        copySeries = ui.select(series_as_dict(), label="Serie")
+                        copySeason = ui.input("Stagione")
+                    with ui.row():
+                        ui.label("Film")
+                        copyFilm = ui.select(movies_as_dict(), label="Film")
+                support = ui.select(label="Supporto", options=["DVD", "Blu-Ray", "VHS"], value="DVD")
+                with ui.card():
+                    copyShelf = ui.input(label="Scaffale")
+                    copyShelving = ui.input(label="Scaffalatura")
+                with ui.row():
+                    ui.label("Seleziona lingue: ")
+                    ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True).props("use-chips")
+                ui.button("Aggiungi", on_click=lambda: add_copy_check(copyFilm.value, copySeries.value, copySeason.value, support.value, 
+                                                                      copyShelf.value, copyShelving.value))
         #ZONA -----------------------------
         with ui.tab_panel(zone).classes("w-full items-center"):
             with ui.card().classes("border"):
@@ -98,6 +116,49 @@ def update_selected_actors(event):
     global selected_actors
     selected_actors = event.value
     return
+
+def add_copy_check(movie: int, series: int, season: int, support: str, shelf: int, shelving: int):
+    if not shelf:
+        notify_empty_field("Scaffale")
+        return
+    elif not shelving:
+        notify_empty_field("Scaffalatura")
+        return
+    elif not movie:
+        if not series:
+            if not season:
+                ui.notify("Devi scegliere uno e un solo articolo", type="info")
+                return
+            else:
+                ui.notify("Seleziona la serie da cui proviene la stagione", type="info")
+                return
+        else:
+            if not season:
+                mess, success = add_copy(movie, series, season, support, shelf, shelving, "SERIES")
+                if success:
+                    notify_added("copia di serie")
+                else:
+                    ui.notify(mess, type="negative")
+            else:
+                mess, success = add_copy(movie, series, season, support, shelf, shelving, "SEASON")
+                if success:
+                    notify_added("copia di serie")
+                else:
+                    ui.notify(mess, type="negative")
+    elif not series:
+        if not season:
+            mess, success = add_copy(movie, series, season, support, shelf, shelving, "MOVIE")
+            if success:
+                notify_added("copia di serie")
+            else:
+                ui.notify(mess, type="negative")
+        else:
+            ui.notify("Non puoi scegliere sia un film che una stagione!", type="negative")
+            return
+    else:
+        ui.notify("Devi scegliere o un film, o una serie, o una stagione di una serie specifica!", type="info")
+        
+            
 
 def add_genre_check(genre: str):
     if not genre:

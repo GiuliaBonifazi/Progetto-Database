@@ -21,7 +21,7 @@ def movie_card(color, movie, director, actors):
             with ui.row():
                 ui.button(text="DVD", on_click=lambda: rent_movie(movie[6], "DVD"))
                 ui.button(text="VHS", on_click=lambda: rent_movie(movie[6], "VHS"))
-                ui.button(text="Blu-Ray", on_click=lambda: rent_movie(movie[6], "Blu Ray"))
+                ui.button(text="Blu-Ray", on_click=lambda: rent_movie(movie[6], "Blu-Ray"))
                 
 def all_movie_cards():
     movie_colors = ["indigo", "blue", "purple", "green", "pink"]
@@ -31,10 +31,13 @@ def all_movie_cards():
             movie_card(movie_colors[randint(0, 4)], m, get_director_name(m[6])[0], get_movie_actors_names(m[7]))
 
 def rent_movie(movieId, support):
-    res = rent_movie_copy(movieId, support)
-    if res is None:
-        ui.notify("Ci spiace! Il titolo richiesto non è al momento disponibile in quel formato", type="negative")
+    res, success= rent_movie_copy(movieId, support)
+    if not success:
+        ui.notify(res, type="negative")
     else:
-        user = get_user
-        user["order"].append(res[0])
-        print(user)
+        user = get_user()
+        if res[0] not in user["order"]:
+            user["order"].append(res[0])
+            print(get_user())
+        else:
+            ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")

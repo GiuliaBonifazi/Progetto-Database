@@ -18,10 +18,11 @@ def get_movie_actors_names(movieId: int):
 def rent_movie_copy(movieId: int, support: str):
     db = get_database()
     cur = db.execute("SELECT CodCopia FROM COPIA_ARTICOLO WHERE CodFilm=? AND Disponibilita=true AND Supporto=?", (movieId, support))
-    if (cur.rowcount == 0):
-        return None
+    row = cur.fetchone()
+    if row is None:
+        return ("Spiacente, quel formato non è al momento disponibile.", False)
     else:
-        return cur.fetchone()
+        return (cur.fetchone(), True)
     
 def get_series_actors_names(seriesId: int):
     db = get_database()
@@ -33,6 +34,16 @@ def get_series():
     cur = db.execute("SELECT Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione, CodSerie FROM SERIE")
     return cur.fetchall()
 
+def get_languages():
+    db = get_database()
+    cur = db.execute("SELECT Denominazione FROM LINGUA")
+    return cur.fetchall()
+
+def get_genres():
+    db = get_database()
+    cur = db.execute("SELECT Nome FROM GENERE")
+    return cur.fetchall()
+
 def get_seasons_from_series(seriesId: int):
     db = get_database()
     cur = db.execute("SELECT CodSerie, NumStagione, NumeroEpisodi, Valutazione, AnnoUscita, PaeseProduzione FROM STAGIONE WHERE CodSerie=? ORDER BY NumStagione", (seriesId,))
@@ -41,16 +52,18 @@ def get_seasons_from_series(seriesId: int):
 def rent_series(seriesId: int, support: str):
     db = get_database()
     cur = db.execute("Select CodCopia FROM COPIA_ARTICOLO WHERE CodSerie=? AND Supporto=? AND Disponibilita=true", (seriesId, support))
-    if (cur.rowcount == 0):
-        return None
+    row = cur.fetchone()
+    if row is None:
+        return ("Spiacente, quel formato non è al momento disponibile.", False)
     else:
-        return cur.fetchone()
+        return (cur.fetchone(), True)
     
 def rent_season(seriesId: int, seasonNum: int, support: str):
     db = get_database()
-    cur = db.execute("Select CodCopia FROM COPIA_ARTICOLO WHERE CodSerieStagione=? AND NumStagione=? AND Supporto=? AND Disponibilita=true",
+    cur = db.execute("Select CodCopia FROM COPIA_ARTICOLO WHERE CodSerie=? AND NumStagione=? AND Supporto=? AND Disponibilita=true",
                     (seriesId, seasonNum, support))
-    if (cur.rowcount == 0):
-        return None
+    row = cur.fetchone()
+    if row is None:
+        return ("Spiacente, quel formato non è al momento disponibile.", False)
     else:
-        return cur.fetchone()
+        return (cur.fetchone(), True)

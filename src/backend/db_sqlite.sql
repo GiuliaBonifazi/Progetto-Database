@@ -6,13 +6,11 @@ CREATE TABLE if not exists COPIA_ARTICOLO (
     NumScaffale INTEGER NOT NULL,
     CodFilm INTEGER,
     CodSerie INTEGER,
-    CodSerieStagione INTEGER,
     NumStagione INTEGER,
     FOREIGN KEY (CodScaffalatura, NumScaffale) REFERENCES SCAFFALE (CodScaffalatura, NumScaffale),
     FOREIGN KEY (CodFilm) REFERENCES FILM (CodFilm),
-    FOREIGN KEY (CodSerie) REFERENCES SERIE (CodSerie),
-    FOREIGN KEY (CodSerieStagione, NumStagione) REFERENCES STAGIONE (CodSerie, NumStagione),
-    CHECK ((CodSerieStagione IS NOT NULL AND NumStagione IS NOT NULL) OR (CodSerieStagione IS NULL AND NumStagione IS NULL))
+    FOREIGN KEY (CodSerie, NumStagione) REFERENCES STAGIONE (CodSerie, NumStagione),
+    CHECK ((CodSerie IS NOT NULL AND NumStagione IS NOT NULL) OR (CodSerie IS NULL AND NumStagione IS NULL))
 );
 
 CREATE TABLE if not exists FILM (

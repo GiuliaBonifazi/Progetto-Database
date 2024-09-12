@@ -23,14 +23,19 @@ def series_card(series, seasons, actors, color):
             with ui.row():
                 ui.button(text="DVD", on_click=lambda: check_rent_series(series[5], "DVD"))
                 ui.button(text="VHS", on_click=lambda: check_rent_series(series[5], "VHS"))
-                ui.button(text="Blu-Ray", on_click=lambda: check_rent_series(series[5], "Blu Ray"))
+                ui.button(text="Blu-Ray", on_click=lambda: check_rent_series(series[5], "Blu-Ray"))
 
 def check_rent_series(seriesId: int, support: str):
-    res = rent_series(seriesId, support)
-    if not res:
-        ui.notify("Spiacente, quel formato non è al momento disponibile.", type="negative")
+    res, success = rent_series(seriesId, support)
+    if not success:
+        ui.notify(res, type="negative")
     else:
-        get_user()["order"].append(res)
+        user = get_user()
+        if res[0] not in user["order"]:
+            user["order"].append(res[0])
+            print(get_user())
+        else:
+            ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")
 
 def season_card(season, color):
     with ui.card().classes("bg-" + color + "-100 border"):
@@ -42,15 +47,20 @@ def season_card(season, color):
             ui.label(text="Paese di Produzione: " + season[5]).classes("text-" + color + "-700")
             with ui.row():
                 ui.button(text="DVD", on_click=lambda: check_rent_season(season[0], season[1] , "DVD"))
-                ui.button(text="VHS", on_click=lambda: check_rent_season(season[0], season[1] , "DVD"))
-                ui.button(text="Blu-Ray", on_click=lambda: check_rent_season(season[0], season[1] , "DVD"))
+                ui.button(text="VHS", on_click=lambda: check_rent_season(season[0], season[1] , "VHS"))
+                ui.button(text="Blu-Ray", on_click=lambda: check_rent_season(season[0], season[1] , "Blu-Ray"))
                 
 def check_rent_season(seriesId: int, seasonNum:  int, support: str):
-    res = rent_season(seriesId, seasonNum, support)
-    if not res:
-        ui.notify("Spiacente, quel formato non è al momento disponibile.", type="negative")
+    res,success = rent_season(seriesId, seasonNum, support)
+    if not success:
+        ui.notify(res, type="negative")
     else:
-        get_user()["order"].append(res)
+        user = get_user()
+        if res[0] not in user["order"]:
+            user["order"].append(res[0])
+            print(get_user())
+        else:
+            ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")
 
 def all_series_cards():
     series_colors = ["indigo", "blue", "purple", "green", "pink"]

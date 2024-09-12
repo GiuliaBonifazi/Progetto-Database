@@ -1,4 +1,4 @@
-from backend import get_database
+from backend import get_database, get_seasons_from_series
 
 def get_all_directors():
     db = get_database()
@@ -103,3 +103,24 @@ def add_language(lang: str):
         db.execute("INSERT INTO LINGUA (Denominazione) VALUES (?)", (lang,))
         db.commit()
         return ("", True)
+    
+def add_copy(movie: int, series: int, season: int, support: str, shelf: int, shelving: int, type: str):
+    db = get_database()
+    if not check_for_shelf(shelving, shelf):
+        return ("La posizione selezionata non è valida", False)
+    match type:
+        case "SERIES":
+            # add new copy for every season. position will be location of first season for all of them
+            for season in get_seasons_from_series(series):
+                add_copy(movie, series, season[1], support, shelf, shelving, "SEASON")
+            return ("", True)
+        case "SEASON":
+            db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodSerie, NumStagione) \
+                        VALUES (?, true, ?, ?, ?, ?)", (support, shelving, shelf, series, season))
+            db.commit()
+            return ("", True)
+        case "MOVIE":
+            db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodFilm) \
+                        VALUES (?, true, ?, ?, ?)", (support, shelving, shelf, movie))
+            db.commit()
+            return ("", True)
