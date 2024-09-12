@@ -38,3 +38,9 @@ def add_season(seriesId: int, numSeason: int, numEpisodes: int, mark: int, year:
     for act in actors:
         db.execute("INSERT INTO RECITAZIONE_STAGIONE (CodAttore, CodSerie, NumStagione) VALUES (?, ?, ?)", (act, seriesId, numSeason))
         db.commit()
+        
+def add_cast(name: str, birth: str, death: str, isActor: bool, isDirector: bool):
+    db = get_database()
+    db.execute("INSERT INTO MEMBRO_DEL_CAST (NomeArte, DataNascita, DataMorte, Attore, Regista) VALUES (?, ?, ?, ?, ?)",
+               (name, birth, death, isActor, isDirector))
+    db.commit()

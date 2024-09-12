@@ -1,6 +1,6 @@
 from nicegui import ui
-from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict
-from backend import add_movie, add_series, add_season
+from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict, notify_added
+from backend import add_movie, add_series, add_season, add_cast
 
 selected_actors = []
 
@@ -54,12 +54,31 @@ def add_to_archive_page():
                 actor_select()
             ui.button(text="Aggiungi", on_click=lambda: add_season_check(codSeason.value, numSeason.value, mark_sea.value,
                                                                  year_sea.value, country_sea.value))
+        #MEMBRO DEL CAST ----------------------
         with ui.tab_panel(member):
-            ui.label('Second tab')
+            with ui.column().classes("w-full items-center"):
+                name = ui.input(label="Nome d'arte *")
+                with ui.row():
+                    ui.label("Data di nascita *")
+                    birth = ui.date()
+                with ui.row():
+                    ui.label("Data di morte")
+                    death = ui.date()
+                isActor = ui.checkbox(text="Attore *")
+                isDirector = ui.checkbox(text="Regista *")
+                ui.button("Aggiungi", on_click=lambda: add_member_check(name.value, birth.value, death.value, isActor.value, isDirector.value))
+        #COPIA -------------------------------
         with ui.tab_panel(copy):
             ui.label('Second tab')
+        #ZONA -----------------------------
         with ui.tab_panel(zone):
-            ui.label('Second tab')
+            with ui.card().classes("border"):
+                shelving = ui.input(label="Scaffalatura")
+                ui.button("Aggiungi")
+            with ui.card().classes("border"):
+                shelfShelving = ui.input(label="Scaffalatura")
+                shelf = ui.input(label="Scaffale")
+                ui.button("Aggiungi")
 
 def actor_select():
     with ui.row():
@@ -99,6 +118,7 @@ def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
     add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors)
+    notify_added("film")
 
 def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: str):
     if not title:
@@ -120,6 +140,7 @@ def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: st
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
     add_series(title, ogTitle, mark, year, country, selected_actors)
+    notify_added("serie")
 
 def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, country: str):
     if not seriesId:
@@ -141,3 +162,14 @@ def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, countr
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
     add_season(seriesId, numSeason, 0, mark, year, country, selected_actors)
+    notify_added("stagione")
+    
+def add_member_check(name: str, birth: str, death: str, actor: bool, director: bool):
+    if not name:
+        notify_empty_field("Nome d'arte")
+        return
+    if not birth:
+        notify_empty_field("Data di nascita")
+        return
+    add_cast(name, birth, death, actor, director)
+    notify_added("membro del cast")
