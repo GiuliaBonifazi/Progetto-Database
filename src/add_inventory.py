@@ -161,14 +161,14 @@ def add_copy_check(movie: int, series: int, season: int, support: str, shelf: in
             else:
                 mess, success = add_copy(movie, series, season, support, shelf, shelving, "SEASON", selected_languages)
                 if success:
-                    notify_added("copia di serie")
+                    notify_added("copia di stagione")
                 else:
                     ui.notify(mess, type="negative")
     elif not series:
         if not season:
             mess, success = add_copy(movie, series, season, support, shelf, shelving, "MOVIE", selected_languages)
             if success:
-                notify_added("copia di serie")
+                notify_added("copia di film")
             else:
                 ui.notify(mess, type="negative")
         else:
