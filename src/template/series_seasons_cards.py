@@ -37,7 +37,6 @@ def check_rent_series(seriesId: int, support: str):
         user = get_user()
         if res[0] not in user["order"]:
             user["order"].append(res[0])
-            print(get_user())
             ui.notify("Aggiunto alla prenotazione (ricorda di confermare prima di uscire!)", type="positive")
         else:
             ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")

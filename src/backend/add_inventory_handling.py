@@ -139,7 +139,6 @@ def add_copy(movie: int, series: int, season: int, support: str, shelf: int, she
                 insert_copy_languages(cur.lastrowid, languages)
                 return ("", True)
         case "MOVIE":
-            print(support, shelving, shelf, movie)
             cur = db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodFilm) \
                         VALUES (?, true, ?, ?, ?)", (support, shelving, shelf, movie))
             db.commit()
