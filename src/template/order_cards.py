@@ -1,8 +1,9 @@
 from nicegui import ui
 from random import randint
 from backend import get_order_items, all_orders_from_user, mark_collection, mark_returned, active_orders
+from logged_user import get_user
 
-# attribute order: SERIE.Titolo, FILM.Titolo, NumStagione, Supporto
+# attribute order: SERIE.Titolo, FILM.Titolo, NumStagione, Supporto, CodCopia
 def simple_order_card(info, languages, color):
     with ui.card().classes("w-full items-center border bg-" + color + "-300" ):
         with ui.column().classes("w-full items-center"):
@@ -18,8 +19,11 @@ def simple_order_card(info, languages, color):
                     ui.label("Lingue: ").classes("text-" + color + "-400").style("font-weight: bold; font-size: 120%")
                     for l in languages:
                         ui.label(l).classes("text-" + color + "-400").style("font-weight: bold; font-size: 120%")
-                        
-    
+            ui.button(icon="delete", on_click=lambda: delete_item(info[4]))
+
+def delete_item(id: int):
+    get_user()["order"].remove(id)
+    ui.navigate.reload()
                         
 def all_orders_from_list(orders):
     card_colors = ["indigo", "blue", "purple", "green", "pink"]

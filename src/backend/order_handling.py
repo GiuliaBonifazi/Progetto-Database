@@ -5,7 +5,7 @@ def get_order_items(copyIds):
     items = []
     db = get_database()
     for id in copyIds:
-        cur = db.execute("SELECT SERIE.Titolo, FILM.Titolo, NumStagione, Supporto \
+        cur = db.execute("SELECT SERIE.Titolo, FILM.Titolo, NumStagione, Supporto, CodCopia \
                          FROM SERIE RIGHT JOIN \
                         (COPIA_ARTICOLO LEFT JOIN FILM ON COPIA_ARTICOLO.CodFilm=FILM.CodFilm) \
                         ON SERIE.CodSerie=COPIA_ARTICOLO.CodSerie \
