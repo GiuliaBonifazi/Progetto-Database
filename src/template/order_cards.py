@@ -1,4 +1,5 @@
 from nicegui import ui
+from random import randint
 
 # attribute order: SERIE.Titolo, FILM.Titolo, NumStagione, Supporto
 def simple_order_card(info, languages, color):
@@ -16,3 +17,13 @@ def simple_order_card(info, languages, color):
                     ui.label("Lingue: ").classes("text-" + color + "-400").style("font-weight: bold; font-size: 120%")
                     for l in languages:
                         ui.label(l).classes("text-" + color + "-400").style("font-weight: bold; font-size: 120%")
+                        
+                        
+def all_orders_from_list(orders):
+    card_colors = ["indigo", "blue", "purple", "green", "pink"]
+    with ui.column().classes("w-full, items-center"):
+        with ui.grid(columns=3).classes("w-full, items-center"):
+            for val in orders:
+                info, lang = val
+                simple_order_card(info, lang, card_colors[randint(0, 4)])
+        ui.button("Conferma").classes("bg-green")
