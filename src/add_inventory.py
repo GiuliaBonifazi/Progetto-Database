@@ -1,6 +1,6 @@
 from nicegui import ui
 from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict, notify_added
-from backend import add_movie, add_series, add_season, add_cast
+from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving
 
 selected_actors = []
 
@@ -13,6 +13,7 @@ def add_to_archive_page():
         member = ui.tab('Cast')
         copy = ui.tab('Copia')
         zone = ui.tab('Zona')
+        other = ui.tab("Altro")
     with ui.tab_panels(tabs, value=film).classes('w-full'):
         #FILM --------------------------
         with ui.tab_panel(film).classes("items-center"):
@@ -71,14 +72,22 @@ def add_to_archive_page():
         with ui.tab_panel(copy):
             ui.label('Second tab')
         #ZONA -----------------------------
-        with ui.tab_panel(zone):
+        with ui.tab_panel(zone).classes("w-full items-center"):
             with ui.card().classes("border"):
                 shelving = ui.input(label="Scaffalatura")
-                ui.button("Aggiungi")
+                ui.button("Aggiungi", on_click=lambda: add_shelving_check(shelving.value))
             with ui.card().classes("border"):
                 shelfShelving = ui.input(label="Scaffalatura")
                 shelf = ui.input(label="Scaffale")
-                ui.button("Aggiungi")
+                ui.button("Aggiungi", on_click=lambda: add_shelf_check(shelf.value, shelfShelving.value))
+        #ALTRO
+        with ui.tab_panel(other).classes("w-full items-center"):
+            with ui.card().classes("border"):
+                genre = ui.input(label="Genere")
+                ui.button("Aggiungi", on_click=lambda: add_genre_check(genre.value))
+            with ui.card().classes("border"):
+                language = ui.input(label="Lingua")
+                ui.button("Aggiungi", on_click=lambda: add_language_check(language.value))
 
 def actor_select():
     with ui.row():
@@ -89,6 +98,16 @@ def update_selected_actors(event):
     global selected_actors
     selected_actors = event.value
     return
+
+def add_genre_check(genre: str):
+    if not genre:
+        notify_empty_field("Genere")
+        return
+    
+def add_language_check(lang: str):
+    if not lang:
+        notify_empty_field("Lingua")
+        return
 
 def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int):
     global selected_actors
@@ -173,3 +192,26 @@ def add_member_check(name: str, birth: str, death: str, actor: bool, director: b
         return
     add_cast(name, birth, death, actor, director)
     notify_added("membro del cast")
+
+def add_shelf_check(shelf: int, shelving: int):
+    if not shelving:
+        notify_empty_field("Scaffalatura")
+        return
+    if not shelf:
+        notify_empty_field("Scaffalte")
+        return
+    mess, success = add_shelf(shelf, shelving)
+    if success:
+        notify_added("scaffale")
+    else:
+        ui.notify(mess, type="negative")
+    
+def add_shelving_check(shelving: int):
+    if not shelving:
+        notify_empty_field("Scaffalatura")
+        return
+    mess, success = add_shelving(shelving)
+    if success:
+        notify_added("scaffalatura")
+    else:
+        ui.notify(mess, type="negative")
