@@ -1,3 +1,11 @@
+INSERT INTO GENERE (Nome)
+VALUES 
+     ("Giallo"), ("Drammatico"), ("Commedia"), ("Horror"), ("Polizesco"), ("Thriller"), 
+     ("Noir"), ("Comico"), ("Fantasy"), ("Fantastico"), ("Fantascienza"), ("Animazione"), 
+     ("Demenziale"),  ("Grottesco"),  ("Musicale"),   ("Sentimentale"),  ("Storico"), 
+     ("Biografico"), ("Documentario"), ("Western"), ("Spionaggio");
+
+
 INSERT INTO UTENTE (CodUtente, Nome, Cognome, Email, `Password`, NumTelefono, PasswordAdmin)
 VALUES
      (1, "Giulia", "Boni", "giulia@giulia.it", "12345678", 24167435, "admin");
@@ -17,6 +25,21 @@ VALUES
      (3, 105, "Edward Mani di Forbice", "Edward Scissorhands", 87, 1990, "USA", 1),
      (4, 92, "Beetlejuice - Spiritello porcello", "Beetlejuice", 89, 1988, "USA", 1),
      (5, 116, "Sweeney Todd - Il diabolico barbiere di Fleet Street", "Sweeney Todd - The demon barber of Fleet Street", 78, 2007, "UK", 1);
+
+INSERT INTO GENERE_FILM (CodFilm, Genere)
+VALUES
+     (1, "Horror"),
+     (1, "Commedia"),
+     (1, "Animazione"),
+     (2, "Drammatico"),
+     (2, "Biografico"),
+     (3, "Horror"),
+     (3, "Grottesco"),
+     (4, "Horror"),
+     (4, "Demenziale"),
+     (4, "Commedia"),
+     (5, "Horror"),
+     (5, "Grottesco");
 
 INSERT INTO RECITAZIONE_FILM (CodFilm, CodAttore)
 VALUES

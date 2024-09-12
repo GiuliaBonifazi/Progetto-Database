@@ -47,7 +47,7 @@ def all_orders_from_user(userId: int):
     cur = db.execute("SELECT CodPrenotazione FROM PRENOTAZIONE WHERE CodUtente=?", (userId,))
     orders = []
     for orderId in cur.fetchall():
-        cur = db.execute("SELECT DataConferma, DataRitiro, RitiroEffettuato FROM PRENOTAZIONE WHERE CodPrenotazione=?", (orderId[0],))
+        cur = db.execute("SELECT DataConferma, DataRitiro, RitiroEffettuato, ConsegnaEffettuata FROM PRENOTAZIONE WHERE CodPrenotazione=?", (orderId[0],))
         data = cur.fetchone()
         cur = db.execute("SELECT CodCopia FROM RICHIESTA WHERE CodPrenotazione=?", (orderId[0],))
         orders.append((data, [x[0] for x in cur.fetchall()]))

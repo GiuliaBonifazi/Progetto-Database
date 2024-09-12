@@ -38,6 +38,10 @@ def order_card_with_dates(info, orders):
                 ui.label("Data Ritiro ancora non raggiunta").style("font-size: 130%; font-weight: bold;")
             else:
                 ui.label("Ritiro effettuato: " + str(info[2])).style("font-size: 130%; font-weight: bold;")
+            if info[3] is None:
+                ui.label("Reso ancora non effettuato").style("font-size: 130%; font-weight: bold;")
+            else:
+                ui.label("Reso effettuato: " + str(info[2])).style("font-size: 130%; font-weight: bold;")
         all_orders_from_list(get_order_items(orders))
 
 def all_user_order_history(userId: int):
