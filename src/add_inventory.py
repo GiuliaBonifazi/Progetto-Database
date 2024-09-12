@@ -79,18 +79,18 @@ def add_to_archive_page():
                     ui.label("Scegli un film, una stagione o una serie").style("font-weight: bold;")
                     with ui.row():
                         ui.label("Serie e stagione")
-                        copySeries = ui.select(series_as_dict(), label="Serie")
+                        copySeries = ui.select(series_as_dict(), label="Serie", clearable=True)
                         copySeason = ui.input("Stagione")
                     with ui.row():
                         ui.label("Film")
-                        copyFilm = ui.select(movies_as_dict(), label="Film")
+                        copyFilm = ui.select(movies_as_dict(), label="Film", clearable=True)
                 support = ui.select(label="Supporto", options=["DVD", "Blu-Ray", "VHS"], value="DVD")
                 with ui.card():
                     copyShelving = ui.input(label="Scaffalatura")
                     copyShelf = ui.input(label="Scaffale")
                 with ui.row():
                     ui.label("Seleziona lingue: ")
-                    ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True, on_change=update_selected_languages).props("use-chips")
+                    ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True, on_change=update_selected_languages, clearable=True).props("use-chips")
                 ui.button("Aggiungi", on_click=lambda: add_copy_check(copyFilm.value, copySeries.value, copySeason.value, support.value, 
                                                                       copyShelf.value, copyShelving.value))
         #ZONA -----------------------------
@@ -114,12 +114,12 @@ def add_to_archive_page():
 def actor_select():
     with ui.row():
         ui.label("Seleziona attori: ")
-        ui.select(actors_as_dict(), label="Attori", multiple=True, on_change=update_selected_actors).props("use-chips")
+        ui.select(actors_as_dict(), label="Attori", multiple=True, on_change=update_selected_actors, clearable=True).props("use-chips")
 
 def genre_select():
     with ui.row():
         ui.label("Seleziona genere/i ")
-        ui.select(get_genres(), label="Generi", multiple=True, on_change=update_selected_genres).props("use-chips")
+        ui.select(get_genres(), label="Generi", multiple=True, on_change=update_selected_genres, clearable=True).props("use-chips")
 
 def update_selected_actors(event):
     global selected_actors
