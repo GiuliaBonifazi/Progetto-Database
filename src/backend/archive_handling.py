@@ -15,6 +15,16 @@ def get_movie_actors_names(movieId: int):
     cur = db.execute("SELECT NomeArte FROM MEMBRO_DEL_CAST JOIN RECITAZIONE_FILM ON CodMembroCast=CodAttore WHERE CodFilm=?", (movieId,))
     return cur.fetchall()
 
+def get_movie_genres(movieId: int):
+    db = get_database()
+    cur = db.execute("SELECT Nome FROM GENERE LEFT JOIN GENERE_FILM ON GENERE.Nome=GENERE_FILM.Genere WHERE CodFilm=?", (movieId,))
+    return cur.fetchall()
+
+def get_series_genres(seriesId: int):
+    db = get_database()
+    cur = db.execute("SELECT Nome FROM GENERE LEFT JOIN GENERE_SERIE ON GENERE.Nome=GENERE_SERIE.Genere WHERE CodSerie=?", (seriesId,))
+    return cur.fetchall()
+
 def rent_movie_copy(movieId: int, support: str):
     db = get_database()
     cur = db.execute("SELECT CodCopia FROM COPIA_ARTICOLO WHERE CodFilm=? AND Disponibilita=true AND Supporto=?", (movieId, support))

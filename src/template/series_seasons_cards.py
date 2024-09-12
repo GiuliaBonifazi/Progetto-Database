@@ -1,9 +1,9 @@
 from nicegui import ui
 from random import randint
 from logged_user import get_user
-from backend import get_series, get_series_actors_names, get_seasons_from_series, rent_season, rent_series
+from backend import get_series, get_series_actors_names, get_seasons_from_series, rent_season, rent_series, get_series_genres
 
-def series_card(series, seasons, actors, color):
+def series_card(series, seasons, actors, color, genres):
     with ui.card().classes("bg-" + color + "-300 border").classes("w-full"):
         with ui.column():
             ui.label(text=series[0]).style("font-weight: bold; font-size: 140%")
@@ -12,6 +12,10 @@ def series_card(series, seasons, actors, color):
                 ui.label(text="Valutazione: " + str(series[2]) + "/100").classes("text-" + color).style("font-weight: bold; font-size: 120%")
                 ui.label(text="Anno d'Uscita: " + str(series[3])).classes("text-" + color + "-700").style("font-weight: bold; font-size: 120%")
                 ui.label(text="Paese di Produzione: " + series[4]).classes("text-" + color).style("font-weight: bold; font-size: 120%")
+            with ui.row():
+                ui.label(text="Genere/i: ").classes("text-" + color + "-700").style("font-weight: bold; font-size: 120%")
+                for g in genres:
+                    ui.label(g[0]).classes("text-" + color + "-700").style("font-weight: bold; font-size: 120%")
             with ui.card().classes("bg-" + color + "-200"):
                 with ui.row():
                     ui.label(text="Attori:").classes("text-" + color).style("font-weight: bold; font-size: 120%")
@@ -67,4 +71,4 @@ def all_series_cards():
     series = get_series()
     with ui.column():
         for s in series:
-            series_card(s, get_seasons_from_series(s[5]), get_series_actors_names(s[5]), series_colors[randint(0, 4)])
+            series_card(s, get_seasons_from_series(s[5]), get_series_actors_names(s[5]), series_colors[randint(0, 4)], get_series_genres(s[5]))
