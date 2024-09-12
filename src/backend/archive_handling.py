@@ -29,7 +29,6 @@ def rent_movie_copy(movieId: int, support: str):
     db = get_database()
     cur = db.execute("SELECT CodCopia FROM COPIA_ARTICOLO WHERE CodFilm=? AND Disponibilita=true AND Supporto=?", (movieId, support))
     row = cur.fetchone()
-    print(row)
     if row is None:
         return ("Spiacente, quel formato non è al momento disponibile.", False)
     else:
