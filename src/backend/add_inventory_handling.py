@@ -57,13 +57,13 @@ def check_for_shelf(shelving: int, shelf: int):
 
 def add_shelf(shelf: int, shelving: int):
     if not check_for_shelf(shelving, shelf):
-        if not check_for_shelving(shelf):
+        if check_for_shelving(shelving):
             db = get_database()
             db.execute("INSERT INTO SCAFFALE (NumScaffale, CodScaffalatura) VALUES (?, ?)", (shelf, shelving))
             db.commit()
             return ("", True)
         else:
-            return ("La scaffalatura selezionata esiste già", False)
+            return ("La scaffalatura selezionata non esiste", False)
     else:
         return ("Lo scaffale inserito esiste già", False)
     
