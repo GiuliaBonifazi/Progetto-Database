@@ -60,18 +60,26 @@ def order_card_with_buttons(info, items):
             with ui.row():
                 if info[4] is None:
                         ui.label("Data Ritiro ancora non raggiunta").style("font-size: 130%; font-weight: bold;")
-                        ui.button("Effettuato", on_click=lambda: mark_collection(True, info[0])).classes("bg-green")
-                        ui.button("Non effettuato", on_click=lambda: mark_collection(False, info[0])).classes("bg-red")
+                        ui.button("Effettuato", on_click=lambda: collected(True, info[0])).classes("bg-green")
+                        ui.button("Non effettuato", on_click=lambda: collected(False, info[0])).classes("bg-red")
                 else:
                     ui.label("Ritiro effettuato: " + (str(bool(info[4])))).style("font-size: 130%; font-weight: bold;")
             with ui.row():
                 if info[5] is None:
                     ui.label("Reso ancora non effettuato").style("font-size: 130%; font-weight: bold;")
-                    ui.button("Effettuato", on_click=lambda: mark_returned(True, info[0])).classes("bg-green")
-                    ui.button("Non effettuato", on_click=lambda: mark_returned(False, info[0])).classes("bg-red")
+                    ui.button("Effettuato", on_click=lambda: returned(True, info[0])).classes("bg-green")
+                    ui.button("Non effettuato", on_click=lambda: returned(False, info[0])).classes("bg-red")
                 else:
                     ui.label("Reso effettuato: " + str((bool(info[5])))).style("font-size: 130%; font-weight: bold;")
         items_with_pos(items)
+
+def returned(value, orderId):
+    mark_returned(value, orderId)
+    ui.navigate.reload()
+
+def collected(value, orderId):
+    mark_collection(value, orderId)
+    ui.navigate.reload()
 
 def item_card_with_pos(info, languages, color):
     with ui.card().classes("w-full items-center border bg-" + color + "-300" ):
