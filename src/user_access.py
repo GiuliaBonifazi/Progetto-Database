@@ -2,6 +2,7 @@ from nicegui import ui
 from backend import login_check, find_user, register_user, repeat_email
 from logged_user import get_user
 from menu import menu_page
+from template import notify_empty_field
 
 @ui.page('/login_page')
 def login_page():
@@ -77,6 +78,4 @@ def signup(email: str, password: str, name: str, surname: str, cell: int):
     else:
         ui.notify("Email già in uso")
 
-def notify_empty_field(field):
-    ui.notify("Non puoi lasciare il campo " + field + " vuoto!")
         
