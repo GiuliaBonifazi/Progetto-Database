@@ -1,5 +1,6 @@
 from nicegui import ui
 from template import directors_as_dict, actors_as_dict, notify_empty_field
+from backend import add_movie
 
 selected_actors = []
 
@@ -28,7 +29,7 @@ def add_to_archive_page():
                 with ui.row():
                     ui.label("Seleziona attori: ")
                     actors = ui.select(actors_as_dict(), label="Attori", multiple=True, on_change=update_selected_actors).props("use-chips")
-                ui.button(text="Conferma", on_click=lambda: add_movie(title.value, ogTitle.value, runtime.value, mark.value, 
+                ui.button(text="Conferma", on_click=lambda: add_movie_check(title.value, ogTitle.value, runtime.value, mark.value, 
                                                               year.value, country.value, director.value))
         with ui.tab_panel(series):
             ui.label('Second tab')
@@ -46,7 +47,7 @@ def update_selected_actors(event):
     selected_actors = event.value
     return
 
-def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int):
+def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int):
     global selected_actors
     print(selected_actors)
     if not title:
@@ -73,4 +74,4 @@ def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, coun
     if len(selected_actors) < 3:
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
-    
+    add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors)

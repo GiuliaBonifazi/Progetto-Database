@@ -12,11 +12,12 @@ def movie_card(color, movie, director, actors):
             ui.label(text="Valutazione: " + str(movie[3]) + "/100").classes("text-" + color + "-700").style("font-weight: bold; font-size: 120%")
             ui.label(text="Anno d'Uscita: " + str(movie[4])).classes("text-" + color).style("font-weight: bold; font-size: 120%")
             ui.label(text="Paese di Produzione: " + movie[5]).classes("text-" + color + "-700").style("font-weight: bold; font-size: 120%")
-            ui.label(text="Regista: " + director).classes("text-" + color).style("font-weight: bold; font-size: 120%")
-            with ui.row():
-                ui.label(text="Attori:").classes("text-" + color).style("font-weight: bold; font-size: 120%")
-                for actor in actors:
-                    ui.label(actor[0]).classes("text-" + color).style("font-weight: bold; font-size: 120%")
+            with ui.card().classes("bg-" + color + "-100"):
+                ui.label(text="Regista: " + director).classes("text-" + color).style("font-weight: bold; font-size: 120%")
+                with ui.row():
+                    ui.label(text="Attori:").classes("text-" + color).style("font-weight: bold; font-size: 120%")
+                    for actor in actors:
+                        ui.label(actor[0]).classes("text-" + color).style("font-weight: bold; font-size: 120%")
             with ui.row():
                 ui.button(text="DVD", on_click=lambda: rent_movie(movie[6], "DVD"))
                 ui.button(text="VHS", on_click=lambda: rent_movie(movie[6], "VHS"))
