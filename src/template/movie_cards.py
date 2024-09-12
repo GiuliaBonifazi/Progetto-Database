@@ -23,9 +23,9 @@ def movie_card(color, movie, director, actors, genres):
                     for actor in actors:
                         ui.label(actor[0]).classes("text-" + color + "-700").style("font-weight: bold; font-size: 120%")
             with ui.row():
-                ui.button(text="DVD", on_click=lambda: rent_movie(movie[6], "DVD"))
-                ui.button(text="VHS", on_click=lambda: rent_movie(movie[6], "VHS"))
-                ui.button(text="Blu-Ray", on_click=lambda: rent_movie(movie[6], "Blu-Ray"))
+                ui.button(text="DVD", on_click=lambda: rent_movie(movie[7], "DVD"))
+                ui.button(text="VHS", on_click=lambda: rent_movie(movie[7], "VHS"))
+                ui.button(text="Blu-Ray", on_click=lambda: rent_movie(movie[7], "Blu-Ray"))
                 
 def all_movie_cards():
     movie_colors = ["indigo", "blue", "purple", "green", "pink"]
