@@ -15,17 +15,6 @@ CREATE TABLE if not exists COPIA_ARTICOLO (
     CHECK ((CodSerieStagione IS NOT NULL AND NumStagione IS NOT NULL) OR (CodSerieStagione IS NULL AND NumStagione IS NULL))
 );
 
-CREATE TABLE if not exists EPISODIO (
-    CodSerie INTEGER NOT NULL,
-    NumStagione INTEGER NOT NULL,
-    Titolo TEXT NOT NULL,
-    NumEpisodio INTEGER NOT NULL,
-    AnnoUscita INTEGER NOT NULL,
-    Durata INTEGER NOT NULL,
-    PRIMARY KEY (CodSerie, NumStagione, NumEpisodio),
-    FOREIGN KEY (CodSerie, NumStagione) REFERENCES STAGIONE (CodSerie, NumStagione)
-);
-
 CREATE TABLE if not exists FILM (
     CodFilm INTEGER PRIMARY KEY,
     Durata INTEGER NOT NULL,

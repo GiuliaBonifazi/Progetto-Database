@@ -75,3 +75,31 @@ def add_shelving(shelving: int):
         db.execute("INSERT INTO SCAFFALATURA (CodScaffalatura) VALUES (?)", (shelving,))
         db.commit()
         return ("", True)
+    
+def check_genre(genre: str):
+    db = get_database()
+    cur = db.execute("SELECT COUNT(*) FROM GENERE WHERE Nome=?", (genre,))
+    return cur.fetchone()[0] > 0
+
+def check_language(lang: str):
+    db = get_database()
+    cur = db.execute("SELECT COUNT(*) FROM LINGUA WHERE Denominazione=?", (lang,))
+    return cur.fetchone()[0] > 0
+
+def add_genre(genre: str):
+    if check_genre(genre):
+        return ("Il genere inserito esiste già", False)
+    else:
+        db = get_database()
+        db.execute("INSERT INTO GENERE (Nome) VALUES (?)", (genre,))
+        db.commit()
+        return ("", True)
+    
+def add_language(lang: str):
+    if check_language(lang):
+        return ("La lingua inserita esiste già", False)
+    else:
+        db = get_database()
+        db.execute("INSERT INTO LINGUA (Denominazione) VALUES (?)", (lang,))
+        db.commit()
+        return ("", True)

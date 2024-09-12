@@ -1,6 +1,6 @@
 from nicegui import ui
 from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict, notify_added
-from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving
+from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, add_genre, add_language
 
 selected_actors = []
 
@@ -103,11 +103,21 @@ def add_genre_check(genre: str):
     if not genre:
         notify_empty_field("Genere")
         return
+    mess, success = add_genre(genre)
+    if success:
+        notify_added("genere")
+    else:
+        ui.notify(mess, type="negative")
     
 def add_language_check(lang: str):
     if not lang:
         notify_empty_field("Lingua")
         return
+    mess, success = add_language(lang)
+    if success:
+        notify_added("lingua")
+    else:
+        ui.notify(mess, type="negative")
 
 def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int):
     global selected_actors
