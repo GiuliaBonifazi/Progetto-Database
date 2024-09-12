@@ -20,7 +20,7 @@ def get_order_items_with_position(copyIds):
     items = []
     db = get_database()
     for id in copyIds:
-        cur = db.execute("SELECT SERIE.Titolo, FILM.Titolo, NumStagione, Supporto, Scaffale, Scaffalatura \
+        cur = db.execute("SELECT SERIE.Titolo, FILM.Titolo, NumStagione, Supporto, NumScaffale, CodScaffalatura \
                          FROM SERIE RIGHT JOIN \
                         (COPIA_ARTICOLO LEFT JOIN FILM ON COPIA_ARTICOLO.CodFilm=FILM.CodFilm) \
                         ON SERIE.CodSerie=COPIA_ARTICOLO.CodSerie \
@@ -52,3 +52,28 @@ def all_orders_from_user(userId: int):
         cur = db.execute("SELECT CodCopia FROM RICHIESTA WHERE CodPrenotazione=?", (orderId[0],))
         orders.append((data, [x[0] for x in cur.fetchall()]))
     return orders
+
+def active_orders():
+    db = get_database()
+    orders = []
+    cur = db.execute("SELECT CodPrenotazione, CodUtente, DataConferma, DataRitiro, RitiroEffettuato, ConsegnaEffettuata FROM PRENOTAZIONE \
+                    WHERE RitiroEffettuato IS NULL OR ConsegnaEffettuata IS NULL")
+    active_orders = cur.fetchall()
+    for o in active_orders:
+        cur = db.execute("SELECT CodCopia FROM RICHIESTA WHERE CodPrenotazione=?", (o[0],))
+        orders.append((o, get_order_items_with_position([x[0] for x in cur.fetchall()])))
+    return orders
+
+def mark_collection(value, orderId):
+    db = get_database()
+    db.execute("UPDATE PRENOTAZIONE SET RitiroEffettuato=? WHERE CodPrenotazione=?", (value, orderId))
+    db.commit()
+    
+def mark_returned(value, orderId):
+    db = get_database()
+    db.execute("UPDATE PRENOTAZIONE SET ConsegnaEffettuata=? WHERE CodPrenotazione=?", (value, orderId))
+    db.commit()
+    if value:
+        db.execute("UPDATE COPIA_ARTICOLO SET Disponibilita=true WHERE CodCopia in \
+            (SELECT CodCopia FROM RICHIESTA WHERE CodPrenotazione=?)", (orderId,))
+    

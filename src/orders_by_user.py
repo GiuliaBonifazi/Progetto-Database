@@ -12,6 +12,7 @@ def orders_by_user_page():
             ui.label("Cognome: ")
             surname = ui.select([x[0] for x in all_user_surnames()], with_input=True)
         ui.button("Cerca", on_click=lambda: user_selected(name.value, surname.value))
+        ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         
         
 def user_selected(name: str, surname: str):
