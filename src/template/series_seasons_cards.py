@@ -38,6 +38,7 @@ def check_rent_series(seriesId: int, support: str):
         if res[0] not in user["order"]:
             user["order"].append(res[0])
             print(get_user())
+            ui.notify("Aggiunto alla prenotazione (ricorda di confermare prima di uscire!)", type="positive")
         else:
             ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")
 
@@ -55,14 +56,14 @@ def season_card(season, color):
                 ui.button(text="Blu-Ray", on_click=lambda: check_rent_season(season[0], season[1] , "Blu-Ray"))
                 
 def check_rent_season(seriesId: int, seasonNum:  int, support: str):
-    res,success = rent_season(seriesId, seasonNum, support)
-    if not success:
+    res, success = rent_season(seriesId, seasonNum, support)
+    if not success or res is None:
         ui.notify(res, type="negative")
     else:
         user = get_user()
         if res[0] not in user["order"]:
             user["order"].append(res[0])
-            print(get_user())
+            ui.notify("Aggiunto alla prenotazione (ricorda di confermare prima di uscire!)", type="positive")
         else:
             ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")
 

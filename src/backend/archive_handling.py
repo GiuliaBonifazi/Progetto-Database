@@ -32,7 +32,7 @@ def rent_movie_copy(movieId: int, support: str):
     if row is None:
         return ("Spiacente, quel formato non è al momento disponibile.", False)
     else:
-        return (cur.fetchone(), True)
+        return (row, True)
     
 def get_series_actors_names(seriesId: int):
     db = get_database()
@@ -66,7 +66,7 @@ def rent_series(seriesId: int, support: str):
     if row is None:
         return ("Spiacente, quel formato non è al momento disponibile.", False)
     else:
-        return (cur.fetchone(), True)
+        return (row, True)
     
 def rent_season(seriesId: int, seasonNum: int, support: str):
     db = get_database()
@@ -76,4 +76,4 @@ def rent_season(seriesId: int, seasonNum: int, support: str):
     if row is None:
         return ("Spiacente, quel formato non è al momento disponibile.", False)
     else:
-        return (cur.fetchone(), True)
+        return (row, True)

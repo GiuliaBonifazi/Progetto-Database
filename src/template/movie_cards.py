@@ -43,5 +43,6 @@ def rent_movie(movieId, support):
         if res[0] not in user["order"]:
             user["order"].append(res[0])
             print(get_user())
+            ui.notify("Aggiunto alla prenotazione (ricorda di confermare prima di uscire!)", type="positive")
         else:
             ui.notify("C'è già una copia di questo articolo nella tua prenotazione!")
