@@ -62,13 +62,13 @@ def add_cast(name: str, birth: str, death: str, isActor: bool, isDirector: bool)
 
 def check_for_shelving(shelving: int):
     db = get_database()
-    cur = db.execute("SELECT COUNT(*) FROM SCAFFALATURA WHERE CodScaffalatura=?", (shelving,))
-    return cur.fetchone()[0] > 0
+    cur = db.execute("SELECT * FROM SCAFFALATURA WHERE CodScaffalatura=?", (shelving,))
+    return cur.fetchone() is not None
 
 def check_for_shelf(shelving: int, shelf: int):
     db = get_database()
-    cur = db.execute("SELECT COUNT(*) FROM SCAFFALE WHERE CodScaffalatura=? AND NumScaffale=?", (shelving, shelf))
-    return cur.fetchone()[0] > 0
+    cur = db.execute("SELECT * FROM SCAFFALE WHERE CodScaffalatura=? AND NumScaffale=?", (shelving, shelf))
+    return cur.fetchone() is not None
 
 def add_shelf(shelf: int, shelving: int):
     if not check_for_shelf(shelving, shelf):
@@ -139,6 +139,7 @@ def add_copy(movie: int, series: int, season: int, support: str, shelf: int, she
                 insert_copy_languages(cur.lastrowid, languages)
                 return ("", True)
         case "MOVIE":
+            print(support, shelving, shelf, movie)
             cur = db.execute("INSERT INTO COPIA_ARTICOLO (Supporto, Disponibilita, CodScaffalatura, NumScaffale, CodFilm) \
                         VALUES (?, true, ?, ?, ?)", (support, shelving, shelf, movie))
             db.commit()

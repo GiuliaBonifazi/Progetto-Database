@@ -47,6 +47,7 @@ CREATE TABLE if not exists PRENOTAZIONE (
     DataConferma DATE NOT NULL,
     DataRitiro DATE NOT NULL,
     RitiroEffettuato BOOLEAN,
+    ConsegnaEffettuata BOOLEAN,
     CodUtente INTEGER NOT NULL,
     FOREIGN KEY (CodUtente) REFERENCES UTENTE (CodUtente)
 );
