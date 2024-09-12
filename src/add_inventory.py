@@ -121,7 +121,6 @@ def add_language_check(lang: str):
 
 def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int):
     global selected_actors
-    print(selected_actors)
     if not title:
         notify_empty_field("Titolo")
         return
