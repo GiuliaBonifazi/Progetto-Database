@@ -29,3 +29,12 @@ def add_series(title: str, ogTitle: str, mark: int, year: int, country: str, act
     for act in actors:
         db.execute("INSERT INTO RECITAZIONE_SERIE (CodAttore, CodSerie) VALUES (?, ?)", (act, seriesId))
         db.commit()
+        
+def add_season(seriesId: int, numSeason: int, numEpisodes: int, mark: int, year: int, country: str, actors):
+    db = get_database()
+    db.execute("INSERT INTO STAGIONE (CodSerie, NumStagione, NumeroEpisodi, Valutazione, AnnoUscita, PaeseProduzione) \
+                      VALUES (?, ?, ?, ?, ?, ?)", (seriesId, numSeason, numEpisodes, mark, year, country))
+    db.commit()
+    for act in actors:
+        db.execute("INSERT INTO RECITAZIONE_STAGIONE (CodAttore, CodSerie, NumStagione) VALUES (?, ?, ?)", (act, seriesId, numSeason))
+        db.commit()

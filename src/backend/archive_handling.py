@@ -30,6 +30,8 @@ def get_series_actors_names(seriesId: int):
 
 def get_series():
     db = get_database()
+    # cur = db.execute("SELECT * FROM STAGIONE")
+    # print(cur.fetchall())
     cur = db.execute("SELECT Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione, CodSerie FROM SERIE")
     return cur.fetchall()
 

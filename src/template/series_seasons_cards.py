@@ -17,9 +17,9 @@ def series_card(series, seasons, actors, color):
                     ui.label(text="Attori:").classes("text-" + color).style("font-weight: bold; font-size: 120%")
                     for actor in actors:
                         ui.label(actor[0]).classes("text-" + color).style("font-weight: bold; font-size: 120%")
-                with ui.grid(columns=3 ):
-                    for season in seasons:
-                        season_card(season, color)
+            with ui.grid(columns=3 ):
+                for season in seasons:
+                    season_card(season, color)
             with ui.row():
                 ui.button(text="DVD", on_click=lambda: check_rent_series(series[5], "DVD"))
                 ui.button(text="VHS", on_click=lambda: check_rent_series(series[5], "VHS"))
@@ -35,11 +35,11 @@ def check_rent_series(seriesId: int, support: str):
 def season_card(season, color):
     with ui.card().classes("bg-" + color + "-100 border"):
         with ui.column():
-            ui.label(text="Stagione " + season[1])
-            ui.label(text="Numero episodi: " + season[2])
-            ui.label(text="Valutazione: " + str(season[3]) + "/100")
-            ui.label(text="Anno d'Uscita: " + str(season[4]))
-            ui.label(text="Paese di Produzione: " + season[5])
+            ui.label(text="Stagione " + str(season[1])).classes("text-" + color + "-700").style("font-weight: bold; font-size: 100%")
+            ui.label(text="Numero episodi: " + str(season[2])).classes("text-" + color + "-700")
+            ui.label(text="Valutazione: " + str(season[3]) + "/100").classes("text-" + color + "-700")
+            ui.label(text="Anno d'Uscita: " + str(season[4])).classes("text-" + color + "-700")
+            ui.label(text="Paese di Produzione: " + season[5]).classes("text-" + color + "-700")
             with ui.row():
                 ui.button(text="DVD", on_click=lambda: check_rent_season(season[0], season[1] , "DVD"))
                 ui.button(text="VHS", on_click=lambda: check_rent_season(season[0], season[1] , "DVD"))
