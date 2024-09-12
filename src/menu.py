@@ -6,6 +6,7 @@ from add_inventory import add_to_archive_page
 from current_order import current_order
 from user_order_history import order_history
 from rankings import rankings_page
+from orders_by_user import orders_by_user_page
 
 @ui.page("/menu_page")
 def menu_page():
@@ -23,7 +24,7 @@ def menu_page():
             ui.label("Sei l'amministratore?").style("font-size: 150%")
             with ui.row():
                 ui.button(icon="add_circle", text="Amplia inventario", on_click=lambda: add_to_inventory()).classes("bg-cyan")
-                ui.button(icon="newspaper", text="Ordini per cliente").classes("bg-cyan")
+                ui.button(icon="newspaper", text="Ordini per cliente", on_click=lambda: orders_by_user()).classes("bg-cyan")
             ui.button(icon='history', text="Ordini attivi").classes("bg-cyan")
     admin_pw = ui.input(label="Password admin")
     ui.button(icon="key", text="Login amministratore", on_click=lambda: check_admin(admin_pw.value)).classes("bg-blue")
@@ -45,4 +46,9 @@ def add_to_inventory():
         ui.navigate.to(add_to_archive_page)
     else:
         ui.notify("Non sei l'amministratore, non puoi accedere a questa funzione!", type="warning")
-        
+
+def orders_by_user():
+    if get_user()["admin"]:
+        ui.navigate.to(orders_by_user_page)
+    else:
+        ui.notify("Non sei l'amministratore, non puoi accedere a questa funzione!", type="warning")

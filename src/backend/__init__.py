@@ -6,3 +6,4 @@ from .initialize_db import create, fill
 from .add_inventory_handling import get_all_directors, get_all_actors, add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, \
                                     add_genre, add_language, add_copy
 from .order_handling import get_order_items, confirm_order, all_orders_from_user
+from .users import all_user_names, all_user_surnames, users_from_name_surname
