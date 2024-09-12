@@ -1,4 +1,5 @@
 from backend import get_database
+from datetime import date
 
 def get_order_items(copyIds):
     items = []
@@ -29,3 +30,24 @@ def get_order_items_with_position(copyIds):
         languages = cur.fetchall()
         items.append((data, languages))
     return items
+
+def confirm_order(copyIds, pickUpDate, userId: int):
+    db = get_database()
+    orderDate = date.today()
+    cur = db.execute("INSERT INTO PRENOTAZIONE (DataConferma, DataRitiro, CodUtente) VALUES (?, ?, ?)", (orderDate, pickUpDate, userId))
+    orderId = cur.lastrowid
+    db.commit()
+    for id in copyIds:
+        db.execute("INSERT INTO RICHIESTA (CodPrenotazione, CodCopia) VALUES (?, ?)", (orderId, id))
+        db.commit()
+        
+def all_orders_from_user(userId: int):
+    db = get_database()
+    cur = db.execute("SELECT CodPrenotazione FROM PRENOTAZIONE WHERE CodUtente=?", (userId,))
+    orders = []
+    for orderId in cur.fetchall():
+        cur = db.execute("SELECT DataConferma, DataRitiro, RitiroEffettuato FROM PRENOTAZIONE WHERE CodPrenotazione=?", (orderId[0],))
+        data = cur.fetchone()
+        cur = db.execute("SELECT CodCopia FROM RICHIESTA WHERE CodPrenotazione=?", (orderId[0],))
+        orders.append((data, [x[0] for x in cur.fetchall()]))
+    return orders

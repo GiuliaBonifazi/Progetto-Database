@@ -1,5 +1,6 @@
 from nicegui import ui
 from random import randint
+from backend import get_order_items, all_orders_from_user
 
 # attribute order: SERIE.Titolo, FILM.Titolo, NumStagione, Supporto
 def simple_order_card(info, languages, color):
@@ -26,4 +27,20 @@ def all_orders_from_list(orders):
             for val in orders:
                 info, lang = val
                 simple_order_card(info, lang, card_colors[randint(0, 4)])
-        ui.button("Conferma").classes("bg-green")
+
+# attribute order: DataConferma, DataRitiro, RitiroEffettuato
+def order_card_with_dates(info, orders):
+    with ui.card():
+        with ui.column():
+            ui.label("Data Conferma: " + str(info[0])).style("font-size: 130%; font-weight: bold;")
+            ui.label("Data Ritiro: " + str(info[1])).style("font-size: 130%; font-weight: bold;")
+            if info[2] is None:
+                ui.label("Data Ritiro ancora non raggiunta").style("font-size: 130%; font-weight: bold;")
+            else:
+                ui.label("Ritiro effettuato: " + str(info[2])).style("font-size: 130%; font-weight: bold;")
+        all_orders_from_list(get_order_items(orders))
+
+def all_user_order_history(userId: int):
+    history = all_orders_from_user(userId)
+    for info, orders in history:
+        order_card_with_dates(info, orders)

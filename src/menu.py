@@ -4,6 +4,7 @@ from backend import login_admin
 from archive import archive_page
 from add_inventory import add_to_archive_page
 from current_order import current_order
+from user_order_history import order_history
 
 @ui.page("/menu_page")
 def menu_page():
@@ -13,7 +14,7 @@ def menu_page():
             ui.label("Sei un cliente?").style("font-size: 150%")
             with ui.row():
                 ui.button(icon="movie", text="Archivio", on_click=lambda: ui.navigate.to(archive_page)).classes("bg-purple")
-                ui.button(icon="history", text="Cronologia ordini").classes("bg-purple")
+                ui.button(icon="history", text="Cronologia ordini", on_click=lambda: ui.navigate.to(order_history)).classes("bg-purple")
             with ui.row():
                 ui.button(icon='verified', text="Ordine corrente", on_click=lambda: ui.navigate.to(current_order)).classes("bg-purple")
                 ui.button(icon='sort', text="Classifiche").classes("bg-purple")
