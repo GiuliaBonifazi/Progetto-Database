@@ -52,12 +52,13 @@ def add_to_archive_page():
                     ui.label("Seleziona serie:")
                     codSeason = ui.select(series_as_dict(), label="Serie")
                 numSeason = ui.input(label="Numero stagione")
+                numEp = ui.input(label="Numero episodi")
                 mark_sea = ui.input(label="Valutazione")
                 year_sea = ui.input(label="Anno d'uscita")
                 country_sea = ui.input(label="Paese di produzione")
                 actor_select()
             ui.button(text="Aggiungi", on_click=lambda: add_season_check(codSeason.value, numSeason.value, mark_sea.value,
-                                                                 year_sea.value, country_sea.value))
+                                                                 year_sea.value, country_sea.value, numEp.value))
         #MEMBRO DEL CAST ----------------------
         with ui.tab_panel(member):
             with ui.column().classes("w-full items-center"):
@@ -85,8 +86,8 @@ def add_to_archive_page():
                         copyFilm = ui.select(movies_as_dict(), label="Film")
                 support = ui.select(label="Supporto", options=["DVD", "Blu-Ray", "VHS"], value="DVD")
                 with ui.card():
-                    copyShelf = ui.input(label="Scaffale")
                     copyShelving = ui.input(label="Scaffalatura")
+                    copyShelf = ui.input(label="Scaffale")
                 with ui.row():
                     ui.label("Seleziona lingue: ")
                     ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True, on_change=update_selected_languages).props("use-chips")
@@ -257,7 +258,7 @@ def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: st
     selected_actors = []
     notify_added("serie")
 
-def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, country: str):
+def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, country: str, numEp: int):
     if not seriesId:
         notify_empty_field("Serie")
         return
@@ -276,7 +277,7 @@ def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, countr
     if len(selected_actors) < 3:
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
-    mess, success = add_season(seriesId, numSeason, 0, mark, year, country, selected_actors)
+    mess, success = add_season(seriesId, numSeason, numEp, mark, year, country, selected_actors)
     if success:
         notify_added("stagione")
     else:

@@ -1,11 +1,12 @@
 from nicegui import ui
 from backend import login_check, find_user, register_user, repeat_email
-from logged_user import get_user
+from logged_user import get_user, reset_logged_user
 from menu import menu_page
 from template import notify_empty_field
 
 @ui.page('/login_page')
 def login_page():
+    reset_logged_user()
     ui.page_title = "Login"
     with ui.column().classes('w-full items-center'):
         ui.label("Login").style("font-size: 150%; font-weight: bold;")
@@ -21,6 +22,7 @@ def login_page():
 
 @ui.page('/signup_page')
 def signup_page():
+    reset_logged_user()
     ui.page_title = "Registrati"
     with ui.column().classes('w-full items-center'):
         ui.label("Registrati").style("font-size: 150%; font-weight: bold;")
