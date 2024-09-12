@@ -3,6 +3,7 @@ from logged_user import get_user
 from backend import login_admin
 from archive import archive_page
 from add_inventory import add_to_archive_page
+from current_order import current_order
 
 @ui.page("/menu_page")
 def menu_page():
@@ -14,7 +15,7 @@ def menu_page():
                 ui.button(icon="movie", text="Archivio", on_click=lambda: ui.navigate.to(archive_page)).classes("bg-purple")
                 ui.button(icon="history", text="Cronologia ordini").classes("bg-purple")
             with ui.row():
-                ui.button(icon='verified', text="Ordine corrente").classes("bg-purple")
+                ui.button(icon='verified', text="Ordine corrente", on_click=lambda: ui.navigate.to(current_order)).classes("bg-purple")
                 ui.button(icon='sort', text="Classifiche").classes("bg-purple")
         with ui.card().classes("bg-blue"):
             ui.label("Sei l'amministratore?").style("font-size: 150%")
@@ -42,3 +43,4 @@ def add_to_inventory():
         ui.navigate.to(add_to_archive_page)
     else:
         ui.notify("Non sei l'amministratore, non puoi accedere a questa funzione!", type="warning")
+        
