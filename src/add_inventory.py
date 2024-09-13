@@ -144,6 +144,9 @@ def add_copy_check(movie: int, series: int, season: int, support: str, shelf: in
     elif not shelving:
         notify_empty_field("Scaffalatura")
         return
+    elif len(selected_languages) <= 0:
+        notify_empty_field("Lingue")
+        return
     elif not movie:
         if not series:
             if not season:
@@ -227,6 +230,9 @@ def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int
     if len(selected_actors) < 3:
         ui.notify("Inserisci almeno 3 attori", type="warning")
         return
+    if len(selected_genres) <= 0:
+        notify_empty_field("Genere")
+        return
     add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors, selected_genres)
     selected_genres = []
     selected_actors = []
@@ -252,6 +258,9 @@ def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: st
         return
     if len(selected_actors) < 3:
         ui.notify("Inserisci almeno 3 attori", type="warning")
+        return
+    if len(selected_genres) <= 0:
+        notify_empty_field("Genere")
         return
     add_series(title, ogTitle, mark, year, country, selected_actors, selected_genres)
     selected_genres = []
