@@ -9,3 +9,4 @@ from .order_handling import get_order_items, confirm_order, all_orders_from_user
 from .users import all_user_names, all_user_surnames, users_from_name_surname
 from .manage_inventory_handling import get_copies_info_from_movie, get_copies_info_from_series
 from .items import delete_item_from_inv
+from .rankings_handling import get_top_ten_genres

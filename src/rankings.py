@@ -1,4 +1,5 @@
 from nicegui import ui
+from backend import get_top_ten_genres
 
 @ui.page("/rankings_page")
 def rankings_page():
@@ -15,4 +16,4 @@ def rankings_page():
         with ui.tab_panel(third):
             ui.button()
         with ui.tab_panel(fourth):
-            ui.button()
+            ui.button(on_click=lambda: get_top_ten_genres())
