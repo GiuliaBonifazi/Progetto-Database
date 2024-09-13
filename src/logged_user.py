@@ -6,4 +6,8 @@ def get_user():
 
 def reset_logged_user():
     global user
-    user = user = {"userId" : 1, "name": "", "surname": "", "admin" : False, "order": []}
+    user["userId"] = None
+    user["name"] = ""
+    user["surname"] = ""
+    user["admin"] = False
+    user["order"] = []
