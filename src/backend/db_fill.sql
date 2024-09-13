@@ -5,6 +5,9 @@ VALUES
      ("Demenziale"),  ("Grottesco"),  ("Musicale"),   ("Sentimentale"),  ("Storico"), 
      ("Biografico"), ("Documentario"), ("Western"), ("Spionaggio");
 
+INSERT INTO LINGUA (Denominazione)
+VALUES
+     ("Italiano"), ("Inglese"), ("Tedesco"), ("Francese"), ("Spagnolo"), ("Giapponese"), ("Coreano");
 
 INSERT INTO UTENTE (CodUtente, Nome, Cognome, Email, `Password`, NumTelefono, PasswordAdmin)
 VALUES

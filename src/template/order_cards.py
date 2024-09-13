@@ -5,7 +5,7 @@ from logged_user import get_user
 
 # attribute order: SERIE.Titolo, FILM.Titolo, NumStagione, Supporto, CodCopia
 def simple_order_card(info, languages, color):
-    with ui.card().classes("w-full items-center border bg-" + color + "-300" ):
+    with ui.card().classes("w-full items-center border bg-" + color + "-300" ) as ret:
         with ui.column().classes("w-full items-center"):
             if info[1] is None:
                 with ui.row():
@@ -19,7 +19,7 @@ def simple_order_card(info, languages, color):
                     ui.label("Lingue: ").classes("text-" + color + "-400").style("font-weight: bold; font-size: 120%")
                     for l in languages:
                         ui.label(l).classes("text-" + color + "-400").style("font-weight: bold; font-size: 120%")
-            ui.button(icon="delete", on_click=lambda: delete_item(info[4]))
+    return ret
 
 def delete_item(id: int):
     get_user()["order"].remove(id)
@@ -32,6 +32,15 @@ def all_orders_from_list(orders):
             for val in orders:
                 info, lang = val
                 simple_order_card(info, lang, card_colors[randint(0, 4)])
+
+def all_orders_from_list_with_delete(orders):
+    card_colors = ["indigo", "blue", "purple", "green", "pink"]
+    with ui.column().classes("w-full, items-center"):
+        with ui.grid(columns=3).classes("w-full, items-center"):
+            for val in orders:
+                info, lang = val
+                with simple_order_card(info, lang, card_colors[randint(0, 4)]):
+                    ui.button(icon="delete", on_click=lambda: delete_item(info[4]))
 
 # attribute order: DataConferma, DataRitiro, RitiroEffettuato
 def order_card_with_dates(info, orders):

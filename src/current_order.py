@@ -1,7 +1,7 @@
 from nicegui import ui
 from backend import get_order_items, confirm_order
 from logged_user import get_user
-from template import all_orders_from_list, notify_empty_field
+from template import all_orders_from_list_with_delete, notify_empty_field
 
 with ui.dialog() as dateDialog, ui.card():
     ui.label('Scegli una data')
@@ -12,7 +12,7 @@ with ui.dialog() as dateDialog, ui.card():
 
 @ui.page("/current_order")
 def current_order():
-    all_orders_from_list(get_order_items(get_user()["order"]))
+    all_orders_from_list_with_delete(get_order_items(get_user()["order"]))
     date = ui.date()
     ui.button("Conferma", on_click=lambda: confirm(date.value)).classes("bg-green")
     
