@@ -16,9 +16,9 @@ def get_top_ten_genres():
                             (SELECT Genere, COUNT(*) FROM GENERE_SERIE GROUP BY Genere), \
                         FilmPerGenere(Genere, Film) AS \
                             (SELECT Genere, COUNT(*) FROM GENERE_FILM GROUP BY Genere) \
-                        SELECT F.Genere, SUM(COALESCE(Film, 0) + COALESCE(Serie,0)) as tot FROM \
-                            (FilmPerGenere AS F LEFT JOIN SeriePerGenere ON F.Genere=SeriePerGenere.Genere) \
-                        GROUP BY F.Genere \
+                        SELECT COALESCE(F.Genere, S.Genere) as gen , SUM(COALESCE(Film, 0) + COALESCE(Serie,0)) as tot FROM \
+                            (FilmPerGenere AS F FULL OUTER JOIN SeriePerGenere AS S ON F.Genere=S.Genere) \
+                        GROUP BY gen \
                         ORDER BY tot DESC \
                         LIMIT 10")
     return cur.fetchall()

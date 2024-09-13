@@ -4,3 +4,4 @@ from .elements import notify_empty_field, notify_added
 from .series_seasons_cards import all_series_cards
 from .order_cards import simple_item_card, all_orders_from_list, all_user_order_history, pending_orders, all_orders_from_list_with_delete, item_card_with_pos, \
                         items_with_pos, items_with_pos_and_delete
+from .top_ten import genre_rankings
