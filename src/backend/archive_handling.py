@@ -17,13 +17,14 @@ def get_movie_actors_names(movieId: int):
 
 def get_movie_genres(movieId: int):
     db = get_database()
-    cur = db.execute("SELECT Nome FROM GENERE LEFT JOIN GENERE_FILM ON GENERE.Nome=GENERE_FILM.Genere WHERE CodFilm=?", (movieId,))
+    cur = db.execute("SELECT Genere FROM GENERE_FILM WHERE CodFilm=?", (movieId,))
     return cur.fetchall()
 
 def get_series_genres(seriesId: int):
     db = get_database()
-    cur = db.execute("SELECT Nome FROM GENERE LEFT JOIN GENERE_SERIE ON GENERE.Nome=GENERE_SERIE.Genere WHERE CodSerie=?", (seriesId,))
-    return cur.fetchall()
+    cur = db.execute("SELECT Genere FROM GENERE_SERIE WHERE CodSerie=?", (seriesId,))
+    rows = cur.fetchall()
+    return rows
 
 def rent_movie_copy(movieId: int, support: str):
     db = get_database()
