@@ -5,7 +5,7 @@ def get_movies():
     cur = db.execute("SELECT Titolo, TitoloOriginale, Durata, Valutazione, AnnoUscita, PaeseProduzione, CodRegista, CodFilm FROM FILM")
     return cur.fetchall()
 
-def get_director_name(id: int):
+def get_cast_member_name(id: int):
     db = get_database()
     cur = db.execute("SELECT NomeArte FROM MEMBRO_DEL_CAST WHERE CodMembroCast=?", (id,))
     return cur.fetchone()

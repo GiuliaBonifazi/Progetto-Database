@@ -1,5 +1,5 @@
 from nicegui import ui
-from backend import get_movies, get_director_name, get_movie_actors_names, rent_movie_copy, get_movie_genres
+from backend import get_movies, get_cast_member_name, get_movie_actors_names, rent_movie_copy, get_movie_genres
 from random import randint
 from logged_user import get_user
 
@@ -32,7 +32,7 @@ def all_movie_cards():
     movies = get_movies()
     with ui.grid(columns=4):
         for m in movies:
-            movie_card(movie_colors[randint(0, 4)], m, get_director_name(m[6])[0], get_movie_actors_names(m[7]), get_movie_genres(m[7]))
+            movie_card(movie_colors[randint(0, 4)], m, get_cast_member_name(m[6])[0], get_movie_actors_names(m[7]), get_movie_genres(m[7]))
 
 def rent_movie(movieId, support):
     res, success= rent_movie_copy(movieId, support)
