@@ -5,5 +5,7 @@ from .archive_handling import get_movies, get_series, get_director_name, get_mov
 from .initialize_db import create, fill
 from .add_inventory_handling import get_all_directors, get_all_actors, add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, \
                                     add_genre, add_language, add_copy
-from .order_handling import get_order_items, confirm_order, all_orders_from_user, mark_collection, mark_returned, active_orders
+from .order_handling import get_order_items, confirm_order, all_orders_from_user, mark_collection, mark_returned, active_orders, get_order_items_with_position
 from .users import all_user_names, all_user_surnames, users_from_name_surname
+from .manage_inventory_handling import get_copies_info_from_movie, get_copies_info_from_series
+from .items import delete_item_from_inv

@@ -8,6 +8,7 @@ from user_order_history import order_history
 from rankings import rankings_page
 from orders_by_user import orders_by_user_page
 from active_orders_page import active_orders_page
+from manage_inventory import manage_inventory_page
 
 @ui.page("/menu_page")
 def menu_page():
@@ -26,7 +27,9 @@ def menu_page():
             with ui.row():
                 ui.button(icon="add_circle", text="Amplia inventario", on_click=lambda: add_to_inventory()).classes("bg-cyan")
                 ui.button(icon="newspaper", text="Ordini per cliente", on_click=lambda: orders_by_user()).classes("bg-cyan")
-            ui.button(icon='history', text="Ordini attivi", on_click=lambda: active_orders_check()).classes("bg-cyan")
+            with ui.row():
+                ui.button(icon='history', text="Ordini attivi", on_click=lambda: active_orders_check()).classes("bg-cyan")
+                ui.button(icon='cancel', text="Gestisci inventario", on_click=lambda: manage_inventory()).classes("bg-cyan")
     admin_pw = ui.input(label="Password admin")
     ui.button(icon="key", text="Login amministratore", on_click=lambda: check_admin(admin_pw.value)).classes("bg-blue")
     
@@ -41,6 +44,13 @@ def check_admin(password: str):
             ui.notify("Benvenuto, admin!", type="positive")
         else:
             ui.notify("Password admin sbagliata!", type="info")
+
+def manage_inventory():
+    if get_user()["admin"]:
+        ui.navigate.to(manage_inventory_page)
+    else:
+        ui.notify("Non sei l'amministratore, non puoi accedere a questa funzione!", type="warning")
+
 
 def add_to_inventory():
     if get_user()["admin"]:

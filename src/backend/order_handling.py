@@ -20,7 +20,7 @@ def get_order_items_with_position(copyIds):
     items = []
     db = get_database()
     for id in copyIds:
-        cur = db.execute("SELECT SERIE.Titolo, FILM.Titolo, NumStagione, Supporto, NumScaffale, CodScaffalatura \
+        cur = db.execute("SELECT SERIE.Titolo, FILM.Titolo, NumStagione, Supporto, NumScaffale, CodScaffalatura, CodCopia \
                          FROM SERIE RIGHT JOIN \
                         (COPIA_ARTICOLO LEFT JOIN FILM ON COPIA_ARTICOLO.CodFilm=FILM.CodFilm) \
                         ON SERIE.CodSerie=COPIA_ARTICOLO.CodSerie \
