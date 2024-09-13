@@ -18,4 +18,19 @@ def search_movie_db(type: str, search: str):
                     ON CodAttore=CodMembroCast WHERE NomeArte LIKE '%' || ? || '%')"
             cur = db.execute(query, (search,))
     return cur.fetchall()
-            
+
+def search_series_db(type: str, search: str):
+    db = get_database()
+    query = "SELECT Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione, CodSerie FROM SERIE WHERE "
+    match type:
+        case "YEA":
+            query += "AnnoUscita=?"
+            cur = db.execute(query, (search,))
+        case "TTL":
+            query += "Titolo LIKE '%' || ? || '%' OR TitoloOriginale LIKE '%' || ? || '%'"
+            cur = db.execute(query, (search, search))
+        case "ACT":
+            query += "CodSerie IN (SELECT CodSerie FROM RECITAZIONE_SERIE JOIN MEMBRO_DEL_CAST \
+                    ON CodAttore=CodMembroCast WHERE NomeArte LIKE '%' || ? || '%')"
+            cur = db.execute(query, (search,))
+    return cur.fetchall() 

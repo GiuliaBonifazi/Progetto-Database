@@ -74,3 +74,10 @@ def all_series_cards():
         for s in series:
             series_card(s, get_seasons_from_series(s[5]), get_series_actors_names(s[5]), series_colors[randint(0, 4)], get_series_genres(s[5]))
     return col
+
+def some_series_cards(series):
+    series_colors = ["indigo", "blue", "purple", "green", "pink"]
+    with ui.column() as col:
+        for s in series:
+            series_card(s, get_seasons_from_series(s[5]), get_series_actors_names(s[5]), series_colors[randint(0, 4)], get_series_genres(s[5]))
+    return col
