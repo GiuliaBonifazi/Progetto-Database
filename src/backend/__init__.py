@@ -10,3 +10,4 @@ from .users import all_user_names, all_user_surnames, users_from_name_surname
 from .manage_inventory_handling import get_copies_info_from_movie, get_copies_info_from_series
 from .items import delete_item_from_inv
 from .rankings_handling import get_top_ten_genres, get_top_ten_couples, get_top_ten_rated_actors, top_ten_rated_directors
+from .searches import search_movie_db

@@ -30,9 +30,17 @@ def movie_card(color, movie, director, actors, genres):
 def all_movie_cards():
     movie_colors = ["indigo", "blue", "purple", "green", "pink"]
     movies = get_movies()
-    with ui.grid(columns=4):
+    with ui.grid(columns=4) as grid:
         for m in movies:
             movie_card(movie_colors[randint(0, 4)], m, get_cast_member_name(m[6])[0], get_movie_actors_names(m[7]), get_movie_genres(m[7]))
+    return grid
+
+def some_movie_cards(movies):
+    movie_colors = ["indigo", "blue", "purple", "green", "pink"]
+    with ui.grid(columns=4) as grid:
+        for m in movies:
+            movie_card(movie_colors[randint(0, 4)], m, get_cast_member_name(m[6])[0], get_movie_actors_names(m[7]), get_movie_genres(m[7]))
+    return grid
 
 def rent_movie(movieId, support):
     res, success= rent_movie_copy(movieId, support)

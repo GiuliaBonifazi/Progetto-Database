@@ -70,6 +70,7 @@ def check_rent_season(seriesId: int, seasonNum:  int, support: str):
 def all_series_cards():
     series_colors = ["indigo", "blue", "purple", "green", "pink"]
     series = get_series()
-    with ui.column():
+    with ui.column() as col:
         for s in series:
             series_card(s, get_seasons_from_series(s[5]), get_series_actors_names(s[5]), series_colors[randint(0, 4)], get_series_genres(s[5]))
+    return col
