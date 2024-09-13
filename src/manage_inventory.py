@@ -12,13 +12,16 @@ def manage_inventory_page():
             ui.label("Serie: ")
             series = ui.select(series_as_dict(), with_input=True, clearable=True)
         ui.button("Cerca", on_click=lambda: search(movie.value, series.value))
+        ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         
 def search(movieId: int, seriesId: int):
     if seriesId:
         with ui.card().classes("border"):
+            ui.label("Copie della serie trovate").style("font-weight: bold; font-size: 140%")
             items_with_pos_and_delete(get_copies_info_from_series(seriesId))
-    elif movieId:
+    if movieId:
         with ui.card().classes("border"):
+            ui.label("Copie del film trovate").style("font-weight: bold; font-size: 140%")
             items_with_pos_and_delete(get_copies_info_from_movie(movieId))
-    else:
+    if not movieId and not seriesId:
         ui.notify("Scegli almeno un film o una serie!", type="warning")
