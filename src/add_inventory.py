@@ -119,7 +119,7 @@ def add_to_archive_page():
             ui.button("Refresh", on_click=lambda: ui.navigate.reload())
 
 def actor_select():
-    with ui.row():
+    with ui.row(): 
         ui.label("Seleziona attori: ")
         ui.select(actors_as_dict(), label="Attori", multiple=True, on_change=update_selected_actors, clearable=True).props("use-chips")
 
