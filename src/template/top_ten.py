@@ -1,5 +1,5 @@
 from nicegui import ui
-from backend import get_top_ten_genres, get_top_ten_couples, get_cast_member_name
+from backend import get_top_ten_genres, get_top_ten_couples, get_cast_member_name, get_top_ten_rated_actors, top_ten_rated_directors
 from random import randint
 
 def placement_card(genre, amount, placement, color):
@@ -25,3 +25,15 @@ def couple_rankings():
                            couples[i][2],
                            i+1, 
                            card_colors[randint(0, 4)])
+
+def member_rankings(members):
+    card_colors = ["indigo", "blue", "purple", "green", "pink"]
+    with ui.column().classes("w-full, items-left"):
+        for i in range(len(members)):
+            placement_card(get_cast_member_name(members[i][0]), members[i][1], i + 1, card_colors[randint(0, 4)])
+            
+def actor_rankings():
+    member_rankings(get_top_ten_rated_actors())
+
+def director_rankings():
+    member_rankings(top_ten_rated_directors())
