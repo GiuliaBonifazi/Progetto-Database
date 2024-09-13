@@ -25,7 +25,7 @@ def archive_page():
                 ui.button("Cerca", on_click=lambda: series_search("TTL", seriesTitle.value, seriesPanel))
             with ui.row():
                 ui.label("Cerca per anno d'uscita:").style("font-size: 130%; font-weight: bold;")
-                seriesYear = ui.input(label="Anno d'uscita")
+                seriesYear = ui.input(label="Anno d'uscita", validation={"Not a number" : lambda value: value.isnumeric()})
                 ui.button("Cerca", on_click=lambda: series_search("YEA", seriesYear.value, seriesPanel))
             seriesCol = all_series_cards()
         with ui.tab_panel(film) as filmPanel:
@@ -40,7 +40,7 @@ def archive_page():
                 ui.button("Cerca", on_click=lambda: movie_search("TTL", movieTitle.value, filmPanel))
             with ui.row():
                 ui.label("Cerca per anno d'uscita:").style("font-size: 130%; font-weight: bold;")
-                movieYear = ui.input(label="Anno d'uscita")
+                movieYear = ui.input(label="Anno d'uscita", validation={"Not a number" : lambda value: value.isnumeric()})
                 ui.button("Cerca", on_click=lambda: movie_search("YEA", movieYear.value, filmPanel))
             with ui.row():
                 ui.label("Cerca per Regista:").style("font-size: 130%; font-weight: bold;")

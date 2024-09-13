@@ -22,9 +22,9 @@ def add_to_archive_page():
             with ui.grid(columns=2).classes('w-full items-center'):
                 title = ui.input(label="Titolo")
                 ogTitle = ui.input(label="Titolo originale")
-                runtime = ui.input(label="Durata")
-                mark = ui.input(label="Valutazione")
-                year = ui.input(label="Anno d'uscita")
+                runtime = ui.input(label="Durata", validation={"Not a number" : lambda value: value.isnumeric()})
+                mark = ui.input(label="Valutazione", validation={"Not a number" : lambda value: value.isnumeric()})
+                year = ui.input(label="Anno d'uscita", validation={"Not a number" : lambda value: value.isnumeric()})
                 country = ui.input(label="Paese di produzione")
                 genre_select()
                 with ui.row():
@@ -38,8 +38,8 @@ def add_to_archive_page():
             with ui.grid(columns=2).classes('w-full items-center'):
                 title_ser = ui.input(label="Titolo")
                 ogTitle_ser = ui.input(label="Titolo originale")
-                mark_ser = ui.input(label="Valutazione")
-                year_ser = ui.input(label="Anno d'uscita")
+                mark_ser = ui.input(label="Valutazione", validation={"Not a number" : lambda value: value.isnumeric()})
+                year_ser = ui.input(label="Anno d'uscita", validation={"Not a number" : lambda value: value.isnumeric()})
                 country_ser = ui.input(label="Paese di produzione")
                 genre_select()
                 actor_select()
@@ -51,10 +51,10 @@ def add_to_archive_page():
                 with ui.row():
                     ui.label("Seleziona serie:")
                     codSeason = ui.select(series_as_dict(), label="Serie")
-                numSeason = ui.input(label="Numero stagione")
-                numEp = ui.input(label="Numero episodi")
-                mark_sea = ui.input(label="Valutazione")
-                year_sea = ui.input(label="Anno d'uscita")
+                numSeason = ui.input(label="Numero stagione", validation={"Not a number" : lambda value: value.isnumeric()})
+                numEp = ui.input(label="Numero episodi", validation={"Not a number" : lambda value: value.isnumeric()})
+                mark_sea = ui.input(label="Valutazione", validation={"Not a number" : lambda value: value.isnumeric()})
+                year_sea = ui.input(label="Anno d'uscita", validation={"Not a number" : lambda value: value.isnumeric()})
                 country_sea = ui.input(label="Paese di produzione")
                 actor_select()
             ui.button(text="Aggiungi", on_click=lambda: add_season_check(codSeason.value, numSeason.value, mark_sea.value,
@@ -80,14 +80,14 @@ def add_to_archive_page():
                     with ui.row():
                         ui.label("Serie e stagione")
                         copySeries = ui.select(series_as_dict(), label="Serie", clearable=True)
-                        copySeason = ui.input("Stagione")
+                        copySeason = ui.input("Stagione", validation={"Not a number" : lambda value: value.isnumeric()})
                     with ui.row():
                         ui.label("Film")
                         copyFilm = ui.select(movies_as_dict(), label="Film", clearable=True)
                 support = ui.select(label="Supporto", options=["DVD", "Blu-Ray", "VHS"], value="DVD")
                 with ui.card():
-                    copyShelving = ui.input(label="Scaffalatura")
-                    copyShelf = ui.input(label="Scaffale")
+                    copyShelving = ui.input(label="Scaffalatura", validation={"Not a number" : lambda value: value.isnumeric()})
+                    copyShelf = ui.input(label="Scaffale", validation={"Not a number" : lambda value: value.isnumeric()})
                 with ui.row():
                     ui.label("Seleziona lingue: ")
                     ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True, on_change=update_selected_languages, clearable=True).props("use-chips")
@@ -96,11 +96,11 @@ def add_to_archive_page():
         #ZONA -----------------------------
         with ui.tab_panel(zone).classes("w-full items-center"):
             with ui.card().classes("border"):
-                shelving = ui.input(label="Scaffalatura")
+                shelving = ui.input(label="Scaffalatura", validation={"Not a number" : lambda value: value.isnumeric()})
                 ui.button("Aggiungi", on_click=lambda: add_shelving_check(shelving.value))
             with ui.card().classes("border"):
-                shelfShelving = ui.input(label="Scaffalatura")
-                shelf = ui.input(label="Scaffale")
+                shelfShelving = ui.input(label="Scaffalatura", validation={"Not a number" : lambda value: value.isnumeric()})
+                shelf = ui.input(label="Scaffale", validation={"Not a number" : lambda value: value.isnumeric()})
                 ui.button("Aggiungi", on_click=lambda: add_shelf_check(shelf.value, shelfShelving.value))
         #ALTRO ----------------------------
         with ui.tab_panel(other).classes("w-full items-center"):
