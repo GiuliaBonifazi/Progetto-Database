@@ -1,6 +1,6 @@
 from backend import get_database
 
-def search_movie_db(type: str, search: str):
+def search_movie_db(type: str, search):
     db = get_database()
     query = "SELECT Titolo, TitoloOriginale, Durata, Valutazione, AnnoUscita, PaeseProduzione, CodRegista, CodFilm FROM FILM WHERE "
     match type:
@@ -9,7 +9,7 @@ def search_movie_db(type: str, search: str):
             cur = db.execute(query, (search,))
         case "YEA":
             query += "AnnoUscita=?"
-            cur = db.execute(query, (search,))
+            cur = db.execute(query, (int(search),))
         case "TTL":
             query += "Titolo LIKE '%' || ? || '%' OR TitoloOriginale LIKE '%' || ? || '%'"
             cur = db.execute(query, (search, search))
@@ -19,13 +19,13 @@ def search_movie_db(type: str, search: str):
             cur = db.execute(query, (search,))
     return cur.fetchall()
 
-def search_series_db(type: str, search: str):
+def search_series_db(type: str, search):
     db = get_database()
     query = "SELECT Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione, CodSerie FROM SERIE WHERE "
     match type:
         case "YEA":
             query += "AnnoUscita=?"
-            cur = db.execute(query, (search,))
+            cur = db.execute(query, (int(search),))
         case "TTL":
             query += "Titolo LIKE '%' || ? || '%' OR TitoloOriginale LIKE '%' || ? || '%'"
             cur = db.execute(query, (search, search))

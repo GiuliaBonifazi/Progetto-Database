@@ -26,7 +26,7 @@ def archive_page():
             with ui.row():
                 ui.label("Cerca per anno d'uscita:").style("font-size: 130%; font-weight: bold;")
                 seriesYear = ui.input(label="Anno d'uscita")
-                ui.button("Cerca", on_click=lambda: series_search("ACT", seriesYear.value, seriesPanel))
+                ui.button("Cerca", on_click=lambda: series_search("YEA", seriesYear.value, seriesPanel))
             seriesCol = all_series_cards()
         with ui.tab_panel(film) as filmPanel:
             ui.label("Film").style("font-size: 150%; font-weight: bold;")
