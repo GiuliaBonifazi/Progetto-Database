@@ -39,6 +39,7 @@ def confirm_order(copyIds, pickUpDate, userId: int):
     db.commit()
     for id in copyIds:
         db.execute("UPDATE COPIA_ARTICOLO SET Disponibilita=false WHERE CodCopia=?", (id,))
+        db.commit()
         db.execute("INSERT INTO RICHIESTA (CodPrenotazione, CodCopia) VALUES (?, ?)", (orderId, id))
         db.commit()
         
