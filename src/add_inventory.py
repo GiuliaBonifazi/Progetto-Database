@@ -32,7 +32,8 @@ def add_to_archive_page():
                     director = ui.select(directors_as_dict(), label="Regista")
                     actor_select()
                 ui.button(text="Aggiungi", on_click=lambda: add_movie_check(title.value, ogTitle.value, runtime.value, mark.value, 
-                                                                            year.value, country.value, director.value))
+                                                                        year.value, country.value, director.value))
+                ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         #SERIE -------------------------
         with ui.tab_panel(series).classes("items-center"):
             with ui.grid(columns=2).classes('w-full items-center'):
@@ -45,6 +46,7 @@ def add_to_archive_page():
                 actor_select()
             ui.button(text="Aggiungi", on_click=lambda: add_series_check(title_ser.value, ogTitle_ser.value, 
                                                                          mark_ser.value, year_ser.value, country_ser.value))
+            ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         #STAGIONE ----------------------
         with ui.tab_panel(season):
             with ui.grid(columns=2).classes('w-full items-center'):
@@ -59,6 +61,7 @@ def add_to_archive_page():
                 actor_select()
             ui.button(text="Aggiungi", on_click=lambda: add_season_check(codSeason.value, numSeason.value, mark_sea.value,
                                                                  year_sea.value, country_sea.value, numEp.value))
+            ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         #MEMBRO DEL CAST ----------------------
         with ui.tab_panel(member):
             with ui.column().classes("w-full items-center"):
@@ -72,6 +75,7 @@ def add_to_archive_page():
                 isActor = ui.checkbox(text="Attore *")
                 isDirector = ui.checkbox(text="Regista *")
                 ui.button("Aggiungi", on_click=lambda: add_member_check(name.value, birth.value, death.value, isActor.value, isDirector.value))
+                ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         #COPIA -------------------------------
         with ui.tab_panel(copy).classes("w-full items-center"):
             with ui.column().classes("w-full items-center"):
@@ -93,6 +97,7 @@ def add_to_archive_page():
                     ui.select([x[0] for x in get_languages()], label="Lingue", multiple=True, on_change=update_selected_languages, clearable=True).props("use-chips")
                 ui.button("Aggiungi", on_click=lambda: add_copy_check(copyFilm.value, copySeries.value, copySeason.value, support.value, 
                                                                       copyShelf.value, copyShelving.value))
+                ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         #ZONA -----------------------------
         with ui.tab_panel(zone).classes("w-full items-center"):
             with ui.card().classes("border"):
@@ -102,6 +107,7 @@ def add_to_archive_page():
                 shelfShelving = ui.input(label="Scaffalatura", validation={"Not a number" : lambda value: value.isnumeric()})
                 shelf = ui.input(label="Scaffale", validation={"Not a number" : lambda value: value.isnumeric()})
                 ui.button("Aggiungi", on_click=lambda: add_shelf_check(shelf.value, shelfShelving.value))
+            ui.button("Refresh", on_click=lambda: ui.navigate.reload())
         #ALTRO ----------------------------
         with ui.tab_panel(other).classes("w-full items-center"):
             with ui.card().classes("border"):
@@ -110,6 +116,7 @@ def add_to_archive_page():
             with ui.card().classes("border"):
                 language = ui.input(label="Lingua")
                 ui.button("Aggiungi", on_click=lambda: add_language_check(language.value))
+            ui.button("Refresh", on_click=lambda: ui.navigate.reload())
 
 def actor_select():
     with ui.row():
@@ -233,10 +240,13 @@ def add_movie_check(title: str, ogTitle: str, runtime: int, mark: int, year: int
     if len(selected_genres) <= 0:
         notify_empty_field("Genere")
         return
-    add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors, selected_genres)
-    selected_genres = []
-    selected_actors = []
-    notify_added("film")
+    mess, success = add_movie(title, ogTitle, runtime, mark, year, country, director, selected_actors, selected_genres)
+    if success:          
+        selected_genres = []
+        selected_actors = []
+        notify_added("film")
+    else:
+        ui.notify(mess, type="negative")
 
 def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: str):
     global selected_genres
@@ -262,10 +272,13 @@ def add_series_check(title: str, ogTitle: str, mark: int, year: int, country: st
     if len(selected_genres) <= 0:
         notify_empty_field("Genere")
         return
-    add_series(title, ogTitle, mark, year, country, selected_actors, selected_genres)
-    selected_genres = []
-    selected_actors = []
-    notify_added("serie")
+    mess, success = add_series(title, ogTitle, mark, year, country, selected_actors, selected_genres)
+    if success:          
+        selected_genres = []
+        selected_actors = []
+        notify_added("serie")
+    else:
+        ui.notify(mess, type="negative")
 
 def add_season_check(seriesId: int, numSeason: int, mark: int, year: int, country: str, numEp: int):
     if not seriesId:

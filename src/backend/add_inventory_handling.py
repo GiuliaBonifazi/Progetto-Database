@@ -12,6 +12,8 @@ def get_all_actors():
 
 def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, country: str, director: int, actors, genres):
     db = get_database()
+    if not runtime.isnumeric() or not mark.isnumeric() or not year.isnumeric():
+        return ("Inserisci dei valori numerici dove indicato!", False)
     cur = db.execute("INSERT INTO FILM (Titolo, TitoloOriginale, Durata, Valutazione, AnnoUscita, PaeseProduzione, CodRegista) \
                         VALUES (?, ?, ?, ?, ?, ?, ?)", (title, ogTitle, runtime, mark, year, country, director))
     filmId = cur.lastrowid
@@ -22,9 +24,12 @@ def add_movie(title: str, ogTitle: str, runtime: int, mark: int, year: int, coun
     for gen in genres:
         db.execute("INSERT INTO GENERE_FILM (CodFilm, Genere) VALUES (?, ?)", (filmId, gen[0]))
         db.commit()
+    return ("", True)
 
 def add_series(title: str, ogTitle: str, mark: int, year: int, country: str, actors, genres):
     db = get_database()
+    if not mark.isnumeric() or not year.isnumeric():
+        return ("Inserisci dei valori numerici dove indicato!", False)
     cur = db.execute("INSERT INTO SERIE (Titolo, TitoloOriginale, Valutazione, AnnoUscita, PaeseProduzione) \
                      VALUES (?, ?, ?, ?, ?)", (title, ogTitle, mark, year, country))
     seriesId = cur.lastrowid
@@ -35,6 +40,7 @@ def add_series(title: str, ogTitle: str, mark: int, year: int, country: str, act
     for gen in genres:
         db.execute("INSERT INTO GENERE_SERIE (CodSerie, Genere) VALUES (?, ?)", (seriesId, gen[0]))
         db.commit()
+    return ("", True)
        
 def check_series_season(seriesId: int, seasonId: int):
     db = get_database()
@@ -43,6 +49,8 @@ def check_series_season(seriesId: int, seasonId: int):
         
 def add_season(seriesId: int, numSeason: int, numEpisodes: int, mark: int, year: int, country: str, actors):
     db = get_database()
+    if not mark.isnumeric() or not year.isnumeric() or not numSeason.isnumeric() or not numEpisodes.isnumeric():
+        return ("Inserisci dei valori numerici dove indicato!", False)
     if not check_series_season(seriesId, numSeason):
         db.execute("INSERT INTO STAGIONE (CodSerie, NumStagione, NumeroEpisodi, Valutazione, AnnoUscita, PaeseProduzione) \
                         VALUES (?, ?, ?, ?, ?, ?)", (seriesId, numSeason, numEpisodes, mark, year, country))
@@ -71,6 +79,8 @@ def check_for_shelf(shelving: int, shelf: int):
     return cur.fetchone() is not None
 
 def add_shelf(shelf: int, shelving: int):
+    if not shelving.isnumeric() or not shelf.isnumeric():
+        return ("Inserisci dei valori numerici dove indicato!", False)
     if not check_for_shelf(shelving, shelf):
         if check_for_shelving(shelving):
             db = get_database()
@@ -83,6 +93,8 @@ def add_shelf(shelf: int, shelving: int):
         return ("Lo scaffale inserito esiste già", False)
     
 def add_shelving(shelving: int):
+    if not shelving.isnumeric():
+        return ("Inserisci dei valori numerici dove indicato!", False)
     if check_for_shelving(shelving):
         return ("La scaffalatura inserita esiste già", False)
     else:
@@ -121,6 +133,8 @@ def add_language(lang: str):
     
 def add_copy(movie: int, series: int, season: int, support: str, shelf: int, shelving: int, type: str, languages):
     db = get_database()
+    if not shelf.isnumeric() or not shelving.isnumeric() or not season.isnumeric():
+        return ("Inserisci dei valori numerici dove indicato!", False)
     if not check_for_shelf(shelving, shelf):
         return ("La posizione selezionata non è valida", False)
     match type:
