@@ -11,10 +11,13 @@ def find_user(email: str, password: str):
     return cur.fetchone()
 
 def register_user(email: str, password: str, name: str, surname: str, cell: int):
+    if not cell.isnumeric():
+        return ("Serve un numero di telefono valido!", False)
     db = get_database()
     db.execute("INSERT INTO UTENTE (Password, Nome, Cognome, Email, NumTelefono) values (?, ?, ?, ?, ?)", 
                     (password, name, surname, email, cell))
     db.commit()
+    return ("", True)
     
 def repeat_email(email: str):
     db = get_database()

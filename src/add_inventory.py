@@ -135,14 +135,17 @@ def add_to_archive_page():
 def admin_add(pw, id):
     if not pw:
         notify_empty_field("Password Admin")
+        return
     if not id:
         notify_empty_field("Utente")
+        return
     add_admin(id, pw)
     notify_added("Admin")
     
 def admin_delete(id):
     if not id:
         notify_empty_field("Utente")
+        return
     remove_admin(id)
     ui.notify("Admin rimosso con successo!")
 

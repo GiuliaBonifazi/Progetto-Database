@@ -77,9 +77,12 @@ def signup(email: str, password: str, name: str, surname: str, cell: int):
         notify_empty_field("Numero di telefono")
         return
     if not repeat_email(email):
-        register_user(email, password, name, surname, cell)
-        ui.navigate.to("/login_page")
+        mess, success = register_user(email, password, name, surname, cell)
+        if success:
+            ui.navigate.to("/login_page")
+        else:
+            ui.notify(mess, type="negative")
     else:
-        ui.notify("Email già in uso")
+        ui.notify("Email già in uso", type="negative")
 
         
