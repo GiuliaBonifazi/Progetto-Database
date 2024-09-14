@@ -24,3 +24,7 @@ python src/initialize.py
 # 4 - avviare l'applicazione
 
 python src/main.py
+
+# 5 - credenziali
+
+Ci sono 3 utenti inseriti. L'unico interessante è l'admin, email giulia@giulia.it e password 12345678 (password admin: admin). Per le funzioni da utente normale basta crearne uno nuovo.
