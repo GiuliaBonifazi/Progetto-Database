@@ -1,6 +1,8 @@
 from nicegui import ui
-from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict, notify_added, movies_as_dict
-from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, add_genre, add_language, add_copy, get_languages, get_genres
+from template import directors_as_dict, actors_as_dict, notify_empty_field, series_as_dict, notify_added, \
+                    movies_as_dict, users_as_dict
+from backend import add_movie, add_series, add_season, add_cast, add_shelf, add_shelving, add_genre, \
+                    add_language, add_copy, get_languages, get_genres, add_admin, remove_admin
 
 selected_actors = []
 selected_genres = []
@@ -16,6 +18,7 @@ def add_to_archive_page():
         copy = ui.tab('Copia')
         zone = ui.tab('Zona')
         other = ui.tab("Altro")
+        admin = ui.tab("Admin")
     with ui.tab_panels(tabs, value=film).classes('w-full'):
         #FILM --------------------------
         with ui.tab_panel(film).classes("items-center"):
@@ -117,6 +120,31 @@ def add_to_archive_page():
                 language = ui.input(label="Lingua")
                 ui.button("Aggiungi", on_click=lambda: add_language_check(language.value))
             ui.button("Refresh", on_click=lambda: ui.navigate.reload())
+        # ADMIN -------------------
+        with ui.tab_panel(admin).classes("w-full items-center"):
+            with ui.card().classes("border"):
+                ui.label("Aggiungi admin")
+                pw = ui.input(label="Password")
+                adminToAdd = ui.select(users_as_dict(), with_input=True)
+                ui.button("Conferma", on_click=lambda: admin_add(pw.value, adminToAdd.value))
+            with ui.card().classes("border"):
+                ui.label("Rimuovi Admin")
+                remAdmin = ui.select(users_as_dict(), with_input=True)
+                ui.button("Conferma", on_click=lambda: admin_delete(remAdmin.value))
+
+def admin_add(pw, id):
+    if not pw:
+        notify_empty_field("Password Admin")
+    if not id:
+        notify_empty_field("Utente")
+    add_admin(id, pw)
+    notify_added("Admin")
+    
+def admin_delete(id):
+    if not id:
+        notify_empty_field("Utente")
+    remove_admin(id)
+    ui.notify("Admin rimosso con successo!")
 
 def actor_select():
     with ui.row(): 

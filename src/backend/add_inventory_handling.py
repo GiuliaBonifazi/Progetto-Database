@@ -133,7 +133,7 @@ def add_language(lang: str):
     
 def add_copy(movie: int, series: int, season: int, support: str, shelf: int, shelving: int, type: str, languages):
     db = get_database()
-    if not shelf.isnumeric() or not shelving.isnumeric() or not season.isnumeric():
+    if not shelf.isnumeric() or not shelving.isnumeric():
         return ("Inserisci dei valori numerici dove indicato!", False)
     if not check_for_shelf(shelving, shelf):
         return ("La posizione selezionata non è valida", False)
@@ -144,6 +144,8 @@ def add_copy(movie: int, series: int, season: int, support: str, shelf: int, she
                 add_copy(movie, series, season[1], support, shelf, shelving, "SEASON", languages)
             return ("", True)
         case "SEASON":
+            if not season.isnumeric():
+                return ("Inserisci dei valori numerici dove indicato!", False)
             if not check_series_season(series, season):
                 return ("La stagione inserita non esiste", False)
             else:
@@ -164,3 +166,15 @@ def insert_copy_languages(copy, languages):
     for l in languages:
         db.execute("INSERT INTO LINGUA_COPIA (CodCopia, Lingua) VALUES (?, ?)", (copy, l))
         db.commit()
+        
+        
+def add_admin(id, password):
+    db = get_database()
+    db.execute("UPDATE UTENTE SET PasswordAdmin=? WHERE CodUtente=?", (password, id))
+    db.commit()
+    
+def remove_admin(id):
+    db = get_database()
+    db.execute("UPDATE UTENTE SET PasswordAdmin=NULL WHERE CodUtente=?", (id,))
+    db.commit()
+    

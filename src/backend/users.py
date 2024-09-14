@@ -14,3 +14,8 @@ def all_user_surnames():
     db = get_database()
     cur = db.execute("SELECT Cognome FROM UTENTE")
     return cur.fetchall()
+
+def all_users():
+    db = get_database()
+    cur = db.execute("SELECT Nome, Cognome, Email, CodUtente FROM UTENTE")
+    return cur.fetchall()

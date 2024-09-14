@@ -55,6 +55,7 @@ def login(email: str, password: str):
         loggedUser["name"] = foundUser[1]
         loggedUser["surname"] = foundUser[2]
         loggedUser["order"] = []
+        loggedUser["admin"] = False
         ui.navigate.to(menu_page)
     else:
         ui.notify("Login fallito")

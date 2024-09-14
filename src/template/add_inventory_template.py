@@ -1,5 +1,5 @@
 from nicegui import ui
-from backend import get_all_directors, get_all_actors, get_series, get_movies, get_seasons_from_series
+from backend import get_all_directors, get_all_actors, get_series, get_movies, get_seasons_from_series, all_users
 
 
 def directors_as_dict():
@@ -28,4 +28,11 @@ def movies_as_dict():
     dict = {}
     for m in movies:
         dict.update( {m[7] : m[0]} )
+    return dict
+
+def users_as_dict():
+    users = all_users()
+    dict = {}
+    for u in users:
+        dict.update( { u[3] : u[0] + " " + u[1] + " (" + u[2] + ")"})
     return dict
